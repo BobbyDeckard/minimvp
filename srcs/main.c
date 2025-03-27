@@ -16,27 +16,27 @@
 // récuppre
 int main(int ac, char **av, char **envp)
 {
-    t_token **token_list;
-    char    *command;
-    char    *cwd;
+	t_token	**token_list;
+	char	*command;
+	char	*cwd;
 
 	(void) ac;
 	(void) av;
-    while (1)
-    {
+	while (1)
+	{
 		cwd = make_cwd();
 		command = readline(cwd);
 		free(cwd);
 		if (command)
 		{
-		    add_history(command);
-		    token_list = tokenize_input(command);
-		    execute(token_list, envp);
-		    free_token_list(token_list);
-		    free(command);
+			add_history(command);
+			token_list = tokenize_input(command);
+			execute(token_list, envp);
+			free_token_list(token_list);
+			free(command);
 		}
 		else
-		    break;
-    }
-    return (0);
+			break;
+	}
+	return (0);
 }
