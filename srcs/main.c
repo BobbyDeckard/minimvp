@@ -13,7 +13,6 @@
 // -lreadline to compile readline
 #include "../incl/mvp.h"
 
-// récuppre
 int main(int ac, char **av, char **envp)
 {
 	t_token	**token_list;

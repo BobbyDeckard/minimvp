@@ -11,13 +11,13 @@
 #include "../libft/libft.h"
 
 /* MVP structure prototype */
-typedef struct s_exec
+typedef struct s_cmd
 {
 	char	**args;
 	char	*path;
 	int		fd_in;
 	int		fd_out;
-}	t_exec;
+}	t_cmd;
 
 /* Token typology */
 typedef enum

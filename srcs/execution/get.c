@@ -25,35 +25,33 @@ int	count_args(t_token *token_list)
 	return (count);
 }
 
-void	get_args(t_exec *exec, t_token **token_list)
+void	get_args(t_cmd *cmd, t_token **token_list)
 {
 	t_token	*ptr;
-	char	**args;
 	int		count;
 	int		i;
 
 	count = count_args(*token_list);
-	args = (char **) malloc(count * sizeof(char *));
-	if (!args)
+	cmd->args = (char **) malloc(count * sizeof(char *));
+	if (!cmd->args)
 		exit (1);
 	ptr = *token_list;
 	i = -1;
 	while (++i + 1 < count)
 	{
-		args[i] = ptr->content;
+		cmd->args[i] = ptr->content;
 		ptr = ptr->next;
 	}
-	args[i] = NULL;
-	exec->args = args;
+	cmd->args[i] = NULL;
 }
 
-void	found_cmd_path(t_exec *exec, char *path)
+void	found_cmd_path(t_cmd *cmd, char *path)
 {
-	exec->path = ft_strdup(path);
+	cmd->path = ft_strdup(path);
 	free(path);
 }
 
-void	find_cmd_path(t_exec *exec, char **paths, char *name)
+void	find_cmd_path(t_cmd *cmd, char **paths, char *name)
 {
 	char	*full_path;
 	int		i;
@@ -63,13 +61,13 @@ void	find_cmd_path(t_exec *exec, char **paths, char *name)
 	{
 		full_path = ft_strjoin(paths[i], name);
 		if (access(full_path, F_OK) == 0)
-			return (found_cmd_path(exec, full_path));
+			return (found_cmd_path(cmd, full_path));
 		free(full_path);
 	}
 	printf("minishell: %s: command not found\n", name);
 }
 
-void	get_path(t_exec *exec)
+void	get_path(t_cmd *cmd)
 {
 	char	**paths;
 	char	*str;
@@ -77,5 +75,5 @@ void	get_path(t_exec *exec)
 	str = getenv("PATH");
 	paths = ft_split_path(str, ':');
 	// split paths only once and keep array somewhere
-	find_cmd_path(exec, paths, exec->args[0]);
+	find_cmd_path(cmd, paths, cmd->args[0]);
 }

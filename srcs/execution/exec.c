@@ -12,35 +12,35 @@
 
 #include "../../incl/mvp.h"
 
-t_exec	init_exec(void)
+t_cmd	init_cmd(void)
 {
-	t_exec	exec;
+	t_cmd	cmd;
 
-	exec.args = NULL;
-	exec.path = NULL;
-	exec.fd_in = -1;
-	exec.fd_out = -1;
-	return (exec);
+	cmd.args = NULL;
+	cmd.path = NULL;
+	cmd.fd_in = -1;
+	cmd.fd_out = -1;
+	return (cmd);
 }
 
-void	clear_exec(t_exec *exec)
+void	clear_cmd(t_cmd *cmd)
 {
-	if (exec->args)
-		free_args(exec->args);
-	if (exec->path)
-		free(exec->path);
+	if (cmd->args)
+		free_args(cmd->args);
+	if (cmd->path)
+		free(cmd->path);
 }
 
-void	exec_cmd(t_exec *exec, char **envp)
+void	exec_cmd(t_cmd *cmd, char **envp)
 {
 	int	pid;
 
-	if (exec->path)
+	if (cmd->path)
 		pid = fork();
 	else
 		pid = -1;
 	if (pid == 0)
-		execve(exec->path, exec->args, envp);
+		execve(cmd->path, cmd->args, envp);
 	waitpid(pid, NULL, 0);
 
 }
@@ -56,10 +56,10 @@ void	print_args(char **args)
 
 void	execute(t_token **token_list, char **envp)
 {
-	t_exec	exec;
+	t_cmd	cmd;
 	
-	exec = init_exec();
-	get_args(&exec, token_list);
-	get_path(&exec);
-	exec_cmd(&exec, envp);
+	cmd = init_cmd();
+	get_args(&cmd, token_list);
+	get_path(&cmd);
+	exec_cmd(&cmd, envp);
 }
