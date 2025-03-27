@@ -130,7 +130,7 @@ char	**ft_split_path(const char *s, char c);
 char	*make_cwd(void);
 void	execute(t_token **token_list, char **envp);
 void	free_args(char **args);
-void	get_args(t_exec *exec, t_token **token_list);
-void	get_path(t_exec *exec);
+void	get_args(t_cmd *cmd, t_token **token_list);
+void	get_path(t_cmd *cmd);
 
 #endif
