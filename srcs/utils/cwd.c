@@ -39,6 +39,12 @@ char	*trunc_cwd(char *full)
     return (cwd);
 }
 
+// caprice esthétique de ma part, pour afficher le directoire de travail
+// actuel (ou cwd pour Current Working Directory), récupère le path
+// complet avec getcwd(), puis coupe tout ce qui précède le dernier /
+// (compris) et ajoute " > "
+// sera superflu d'appeler cette fonction entre chaque commande
+// uniquement appeler en changeant de directoire
 char	*make_cwd(void)
 {
 	char	*cwd;

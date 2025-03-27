@@ -12,14 +12,13 @@
 
 #include "../../incl/mvp.h"
 
+// initialise la structure cmd avec des valeurs par défaut
 t_cmd	init_cmd(void)
 {
 	t_cmd	cmd;
 
 	cmd.args = NULL;
 	cmd.path = NULL;
-	cmd.fd_in = -1;
-	cmd.fd_out = -1;
 	return (cmd);
 }
 
@@ -31,6 +30,9 @@ void	clear_cmd(t_cmd *cmd)
 		free(cmd->path);
 }
 
+// crée un procès enfant avec fork()
+// appelle l'exécutable de la commande avec execve() dans le procès enfant
+// le procès parent attend la fin du procès enfant avant de poursuivre
 void	exec_cmd(t_cmd *cmd, char **envp)
 {
 	int	pid;
@@ -42,7 +44,7 @@ void	exec_cmd(t_cmd *cmd, char **envp)
 	if (pid == 0)
 		execve(cmd->path, cmd->args, envp);
 	waitpid(pid, NULL, 0);
-
+	clear_cmd(cmd);
 }
 
 void	print_args(char **args)
@@ -54,6 +56,9 @@ void	print_args(char **args)
 		printf("%s\n", args[i]);
 }
 
+// initialise la structure t_cmd
+// crée le tableau de strings args et la string path
+// exécute la commande
 void	execute(t_token **token_list, char **envp)
 {
 	t_cmd	cmd;

@@ -82,6 +82,7 @@ static char	**make_splits(char **tab, const char *s, unsigned int i, char c)
 	return (tab);
 }
 
+// variation de ft_split, qui alloue un char de plus et ajoute un / final
 char	**ft_split_path(const char *s, char c)
 {
 	char			**tab;
