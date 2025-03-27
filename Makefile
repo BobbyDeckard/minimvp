@@ -13,10 +13,13 @@
 NAME = minimvp
 CC = cc
 CFLAGS = -Wextra -Wall -Werror
-LFLAGS = -lreadline -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include/readline
+LFLAGS = -lreadline
 RM = rm
 RMFLAGS = -f
 MAKE = make
+UNAME = $(shell uname)
+ifeq ($(UNAME), Darwin)
+	LFLAGS += -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include/readline
 
 # SOURCES
 SRCS = $(addprefix $(PATH_SRCS), $(SRCS_FILES))
