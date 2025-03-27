@@ -21,8 +21,6 @@ int main(int ac, char **av, char **envp)
 
 	(void) ac;
 	(void) av;
-	(void) envp;
-	(void) token_list;
     while (1)
     {
 	cwd = make_cwd();
