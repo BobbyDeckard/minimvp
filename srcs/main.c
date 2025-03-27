@@ -13,6 +13,7 @@
 // -lreadline to compile readline
 #include "../incl/mvp.h"
 
+// récuppre
 int main(int ac, char **av, char **envp)
 {
     t_token **token_list;
@@ -23,19 +24,19 @@ int main(int ac, char **av, char **envp)
 	(void) av;
     while (1)
     {
-	cwd = make_cwd();
-	command = readline(cwd);
-	free(cwd);
-	if (command)
-	{
-	    add_history(command);
-	    token_list = tokenize_input(command);
-	    execute(token_list, envp);
-	    free_token_list(token_list);
-	    free(command);
-	}
-	else
-	    break;
+		cwd = make_cwd();
+		command = readline(cwd);
+		free(cwd);
+		if (command)
+		{
+		    add_history(command);
+		    token_list = tokenize_input(command);
+		    execute(token_list, envp);
+		    free_token_list(token_list);
+		    free(command);
+		}
+		else
+		    break;
     }
     return (0);
 }
