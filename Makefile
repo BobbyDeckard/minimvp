@@ -20,6 +20,7 @@ MAKE = make
 UNAME = $(shell uname)
 ifeq ($(UNAME), Darwin)
 	LFLAGS += -L /opt/homebrew/opt/readline/lib -I /opt/homebrew/opt/readline/include/readline
+endif
 
 # SOURCES
 SRCS = $(addprefix $(PATH_SRCS), $(SRCS_FILES))
