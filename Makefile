@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/03/27 14:35:04 by imeulema         ###   ########.fr        #
+#    Updated: 2025/03/28 15:40:04 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,11 @@ SYNT_FILES = other_type_check.c \
 			 syntax_check.c
 EXECUTION = $(addprefix execution/, $(EXEC_FILES))
 EXEC_FILES = exec.c \
-			 get.c
+			 clean_pipex.c \
+			 get.c \
+			 get_pipe.c \
+			 paths.c \
+			 pipex.c
 UTILS = $(addprefix utils/, $(UTIL_FILES))
 UTIL_FILES = clear.c \
 			 cwd.c \

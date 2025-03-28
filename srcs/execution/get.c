@@ -6,22 +6,22 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 23:39:10 by imeulema          #+#    #+#             */
-/*   Updated: 2025/03/27 13:40:36 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:56:44 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/mvp.h"
 
 // compte le nombre de tokens dans la liste
-int	count_args(t_token *token_list)
+int	count_args(t_token *ptr)
 {
 	int	count;
 
 	count = 1;
-	while (token_list)
+	while (ptr)
 	{
 		count++;
-		token_list = token_list->next;
+		ptr = ptr->next;
 	}
 	return (count);
 }
@@ -61,11 +61,13 @@ void	found_cmd_path(t_cmd *cmd, char *path)
 // existe
 // s'il existe, appelle la fonction found_cmd_path pour sauvegarder le path
 // s'il n'existe pas, free la string créée par ft_strjoin()
-void	find_cmd_path(t_cmd *cmd, char **paths, char *name)
+void	get_path(t_cmd *cmd, char **paths)
 {
 	char	*full_path;
+	char	*name;
 	int		i;
 
+	name = cmd->args[0];
 	i = -1;
 	while (paths[++i])
 	{
@@ -75,17 +77,4 @@ void	find_cmd_path(t_cmd *cmd, char **paths, char *name)
 		free(full_path);
 	}
 	printf("minishell: %s: command not found\n", name);
-}
-
-// cherche à trouver l'exécutable de la commande appelée
-// pour l'instant, parse aussi les différents paths de l'environnement
-void	get_path(t_cmd *cmd)
-{
-	char	**paths;
-	char	*str;
-
-	str = getenv("PATH");
-	paths = ft_split_path(str, ':');
-	// split paths only once and keep array somewhere
-	find_cmd_path(cmd, paths, cmd->args[0]);
 }

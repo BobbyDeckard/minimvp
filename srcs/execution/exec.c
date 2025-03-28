@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 23:27:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/03/27 13:59:02 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:22:54 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_cmd	init_cmd(void)
 
 	cmd.args = NULL;
 	cmd.path = NULL;
+	cmd.fdin = STDIN_FILENO;
+	cmd.fdout = STDOUT_FILENO;
 	return (cmd);
 }
 
@@ -59,12 +61,53 @@ void	print_args(char **args)
 // initialise la structure t_cmd
 // crée le tableau de strings args et la string path
 // exécute la commande
-void	execute(t_token **token_list, char **envp)
+void	execute_single(t_token **token_list, char **envp, char **paths)
 {
 	t_cmd	cmd;
 	
 	cmd = init_cmd();
 	get_args(&cmd, token_list);
-	get_path(&cmd);
+	get_path(&cmd, paths);
 	exec_cmd(&cmd, envp);
+}
+
+void	execute_simple_pipe(t_token **token_list, char **envp, char **paths)
+{
+	t_cmd	cmd1;
+	t_cmd	cmd2;
+
+	cmd1 = init_cmd();
+	cmd2 = init_cmd();
+	get_pipe_args(&cmd1, &cmd2, token_list);
+	get_path(&cmd1, paths);
+	get_path(&cmd2, paths);
+	pipex(&cmd1, &cmd2, envp);
+}
+
+int		get_exec_type(t_token **token_list)
+{
+	t_token	*ptr;
+
+	ptr = *token_list;
+	while (ptr)
+	{
+		if (ptr->type == 12)
+			return (2);
+		else if (ptr->type != 1)
+			return (0);
+		ptr = ptr->next;
+	}
+	return (1);
+}
+
+void	execute(t_token **token_list, char **envp, char **paths)
+{
+	int	exec_type;
+
+	exec_type = get_exec_type(token_list);
+	if (exec_type == 1)
+		execute_single(token_list, envp, paths);
+	else if (exec_type == 2)
+		execute_simple_pipe(token_list, envp, paths);
+	return ;
 }
