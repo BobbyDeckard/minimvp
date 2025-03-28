@@ -10,15 +10,6 @@
 #include <stdbool.h>
 #include "../libft/libft.h"
 
-/* MVP structure prototype */
-typedef struct s_cmd
-{
-	char	**args;
-	char	*path;
-	int		fd_in;
-	int		fd_out;
-}	t_cmd;
-
 /* Token typology */
 typedef enum
 {
@@ -64,6 +55,28 @@ typedef struct s_token
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
+
+/* Command struct */
+typedef struct s_cmd
+{
+	char	**args;
+	char	*path;
+	int		fdin;
+	int		fdout;
+}	t_cmd;
+
+/* Pipe struct */
+typedef struct s_pip
+{
+	char	**cmd1_args;
+	char	**cmd2_args;
+	char	**paths;
+	char	*cmd1_path;
+	char	*cmd2_path;
+	int		fd[2];
+	int		fdin;
+	int		fdout;
+}	t_pip;
 
 /* I-TOKENIZATION */
 
@@ -128,9 +141,19 @@ void			print_token_list(t_token **token_list);
 /* General use functions */
 char	**ft_split_path(const char *s, char c);
 char	*make_cwd(void);
-void	execute(t_token **token_list, char **envp);
+void	execute(t_token **token_list, char **envp, char **paths);
 void	free_args(char **args);
 void	get_args(t_cmd *cmd, t_token **token_list);
-void	get_path(t_cmd *cmd);
+void	get_pipe_args(t_cmd *cmd1, t_cmd *cmd2, t_token **token_list);
+void	get_path(t_cmd *cmd, char **paths);
+char	**split_paths(void);
+
+/* Pipe functions */
+void	clean_exit_pipe(t_pip *pip);
+void	clean_up_pipe(t_pip *pip);
+void	close_fds(t_pip *pip);
+void	free_args_pipe(char **args);
+void	free_paths_pipe(t_pip *pip);
+void	pipex(t_cmd *cmd1, t_cmd *cmd2, char **envp);
 
 #endif
