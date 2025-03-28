@@ -31,7 +31,7 @@ int main(int ac, char **av, char **envp)
 			add_history(command);
 			token_list = tokenize_input(command);
 			execute(token_list, envp);
-			free_token_list(token_list);
+//			free_token_list(token_list);
 			free(command);
 		}
 		else
