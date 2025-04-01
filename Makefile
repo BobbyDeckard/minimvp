@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/03/31 18:58:57 by imeulema         ###   ########.fr        #
+#    Updated: 2025/04/02 00:44:41 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,12 @@ PATH_OBJS = objs/
 OBJS = $(patsubst $(PATH_SRCS)%.c, $(PATH_OBJS)%.o, $(SRCS))
 
 # SOURCE FILES
+PSEUDO = $(addprefix pseudo_parsing/, $(PSEUDO_FILES))
+PSEUDO_FILES = ft_split_path.c \
+			   pseudo_parse.c
+EXEC = $(addprefix exec/, $(EXEC_FILES))
+EXEC_FILES = exec.c \
+			 get_path.c
 
 # INCLUDES
 HEADERS = incl/mvp.h
