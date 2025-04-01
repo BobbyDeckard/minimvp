@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incl/mvp.h"
+#include "../../incl/minishell.h"
 
 static unsigned int	get_len(const char *s, unsigned int i, char c)
 {

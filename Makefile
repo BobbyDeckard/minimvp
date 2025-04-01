@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = astmvp
+NAME = minimvp
 CC = cc
 CFLAGS = -Wextra -Wall -Werror
 LFLAGS = -lreadline
@@ -24,7 +24,9 @@ endif
 
 # SOURCES
 SRCS = $(addprefix $(PATH_SRCS), $(SRCS_FILES))
-SRCS_FILES = main.c
+SRCS_FILES = main.c \
+			 $(PSEUDO) \
+			 $(EXEC)
 PATH_SRCS = srcs/
 PATH_OBJS = objs/
 OBJS = $(patsubst $(PATH_SRCS)%.c, $(PATH_OBJS)%.o, $(SRCS))
@@ -38,7 +40,8 @@ EXEC_FILES = exec.c \
 			 get_path.c
 
 # INCLUDES
-HEADERS = incl/mvp.h
+HEADERS = incl/minishell.h \
+		  incl/exec.h
 LIBFT = libft/libft.a
 
 # TERMINAL COLORS

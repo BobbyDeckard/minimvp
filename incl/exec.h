@@ -43,7 +43,7 @@ typedef struct s_ast
 
 /* Pseudo parsing functions */
 t_ast *make_ast();
-char	**ft_split_paths(const char *s, char c);
+char	**ft_split_path(const char *s, char c);
 char	**get_paths(void);
 
 /* Execution functions */
