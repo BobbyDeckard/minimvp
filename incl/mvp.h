@@ -47,6 +47,25 @@ typedef enum
 	UNKNOWN = 25     /* Error handling */
 }	t_token_type;
 
+typedef enum e_node_type
+{
+	NODE_CMD,
+	NODE_PIPE,
+	NODE_AND_IF,
+	NODE_OR_IF,
+	NODE_REDIR_IN,
+	NODE_REDIR_OUT,
+	NODE_REDIR_APPEND,
+	NODE_HEREDOC
+}	t_node_type;
+
+typedef struct s_redir
+{
+	t_node_type		type;
+	char			*file;
+	struct s_redir	*next;
+}	t_redir;
+
 /* Token struct */
 typedef struct s_token
 {
@@ -56,14 +75,29 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
-/* Command struct */
-typedef struct s_cmd
-{
-	char	**args;
+typedef struct s_cmd {
+    char	**argv;         // NULL-terminated array of arguments
 	char	*path;
-	int		fdin;
-	int		fdout;
-}	t_cmd;
+    t_redir	*redirs;        // redirection list
+} t_cmd;
+
+/* my own cmd struct */
+/* Command struct */
+//typedef struct s_cmd
+//{
+//	char	**args;
+//	char	*path;
+//	int		fdin;
+//	int		fdout;
+//}	t_cmd;
+
+typedef struct s_ast
+{
+	t_node_type	type;
+	struct s_ast *left;
+	struct s_ast *right;
+	t_cmd	cmd;
+}	t_ast;
 
 /* Pipe struct */
 typedef struct s_pip
@@ -140,20 +174,20 @@ void			print_token_list(t_token **token_list);
 /* IV-EXECUTION */
 /* General use functions */
 char	**ft_split_path(const char *s, char c);
-char	*make_cwd(void);
-void	execute(t_token **token_list, char **envp, char **paths);
-void	free_args(char **args);
-void	get_args(t_cmd *cmd, t_token **token_list);
-void	get_pipe_args(t_cmd *cmd1, t_cmd *cmd2, t_token **token_list);
-void	get_path(t_cmd *cmd, char **paths);
+//char	*make_cwd(void);
+//void	execute(t_token **token_list, char **envp, char **paths);
+//void	free_args(char **args);
+//void	get_args(t_cmd *cmd, t_token **token_list);
+//void	get_pipe_args(t_cmd *cmd1, t_cmd *cmd2, t_token **token_list);
+//void	get_path(t_cmd *cmd, char **paths);
 char	**split_paths(void);
+void	exec_ast(t_ast *ast, char **paths, char **envp);
 
 /* Pipe functions */
-void	clean_exit_pipe(t_pip *pip);
-void	clean_up_pipe(t_pip *pip);
-void	close_fds(t_pip *pip);
-void	free_args_pipe(char **args);
-void	free_paths_pipe(t_pip *pip);
-void	pipex(t_cmd *cmd1, t_cmd *cmd2, char **envp);
+//void	clean_exit_pipe(t_pip *pip);
+//void	clean_up_pipe(t_pip *pip);
+//void	close_fds(t_pip *pip);
+//void	free_args_pipe(char **args);
+//void	pipex(t_cmd *cmd1, t_cmd *cmd2, char **envp);
 
 #endif

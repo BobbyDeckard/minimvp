@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/03/28 15:40:04 by imeulema         ###   ########.fr        #
+#    Updated: 2025/03/31 18:58:57 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,8 @@ endif
 SRCS = $(addprefix $(PATH_SRCS), $(SRCS_FILES))
 SRCS_FILES = main.c \
 			 $(PARSING) \
-			 $(EXECUTION) \
-			 $(UTILS)
+			 $(UTILS) \
+			 $(AST)
 PATH_SRCS = srcs/
 PATH_OBJS = objs/
 OBJS = $(patsubst $(PATH_SRCS)%.c, $(PATH_OBJS)%.o, $(SRCS))
@@ -58,6 +58,10 @@ UTILS = $(addprefix utils/, $(UTIL_FILES))
 UTIL_FILES = clear.c \
 			 cwd.c \
 			 ft_split_path.c
+AST = $(addprefix ast/, $(AST_FILES))
+AST_FILES = pseudo_parsing.c \
+			exec_ast.c \
+			paths.c
 
 # INCLUDES
 HEADERS = incl/mvp.h
