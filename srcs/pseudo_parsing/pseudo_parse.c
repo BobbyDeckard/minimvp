@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/02 00:31:15 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:20:17 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,113 @@ char **make_args(int count, ...) {
     return argv;
 }
 
-t_ast *make_ast() {
-    // echo "ok"
-    t_ast *echo_ok = malloc(sizeof(t_ast));
+/* cat file | grep foo */
+t_ast	*make_ast(void)
+{
+    t_ast	*cat;
+	cat = (t_ast *) malloc(sizeof(t_ast));
+    cat->type = NODE_CMD;
+    cat->cmd.args = make_args(2, "cat", "file");
+	cat->cmd.fd_in = STDIN_FILENO;
+	cat->cmd.fd_out = STDOUT_FILENO;
+	cat->children = NULL;
+	cat->file = NULL;
+
+	t_ast	*grep;
+	grep = (t_ast *) malloc(sizeof(t_ast));
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "foo");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = NULL;
+	grep->file = NULL;
+
+	/*
+	t_ast	*grep_bar;
+	grep_bar = (t_ast *) malloc(sizeof(t_ast));
+	grep_bar->type = NODE_CMD;
+	grep_bar->cmd.args = make_args(2, "grep", "bar");
+	grep_bar->cmd.fd_in = STDIN_FILENO;
+	grep_bar->cmd.fd_out = STDOUT_FILENO;
+	grep_bar->children = NULL;
+	grep_bar->file = NULL;
+	*/
+
+	t_ast	*wc;
+	wc = (t_ast *) malloc(sizeof(t_ast));
+	wc->type = NODE_CMD;
+	wc->cmd.args = make_args(2, "wc", "-l");
+	wc->cmd.fd_in = STDIN_FILENO;
+	wc->cmd.fd_out = STDOUT_FILENO;
+	wc->children = NULL;
+	wc->file = NULL;
+
+	t_ast	*pipe;
+	pipe = (t_ast *) malloc(sizeof(t_ast));
+	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
+	pipe->children = (t_ast **) malloc(4 * sizeof(t_ast *));
+	pipe->children[0] = cat;
+	pipe->children[1] = grep;
+//	pipe->children[2] = grep_bar;
+	pipe->children[2] = wc;
+	pipe->children[3] = NULL;
+	pipe->file = NULL;
+
+	return (pipe);
+}
+
+/* cat file && echo "ok" || echo "fail"
+t_ast	*make_ast(void)
+{
+    t_ast *cat;
+	cat = malloc(sizeof(t_ast));
+    cat->type = NODE_CMD;
+    cat->cmd.args = make_args(2, "cat", "file");
+	cat->cmd.fd_in = STDIN_FILENO;
+	cat->cmd.fd_out = STDOUT_FILENO;
+	cat->children = NULL;
+	cat->file = NULL;
+
+    t_ast *echo_ok;
+	echo_ok = malloc(sizeof(t_ast));
     echo_ok->type = NODE_CMD;
     echo_ok->cmd.args = make_args(2, "echo", "ok");
-	echo_ok->left = NULL;
-	echo_ok->right = NULL;
+	echo_ok->cmd.fd_in = STDIN_FILENO;
+	echo_ok->cmd.fd_out = STDOUT_FILENO;
+	echo_ok->children = NULL;
+	echo_ok->file = NULL;
 
-    // ls
-    t_ast *ls = malloc(sizeof(t_ast));
-    ls->type = NODE_CMD;
-    ls->cmd.args = make_args(1, "ls");
-	ls->left = NULL;
-	ls->right = NULL;
-
-    // echo "fail"
-    t_ast *echo_fail = malloc(sizeof(t_ast));
+    t_ast *echo_fail;
+	echo_fail = malloc(sizeof(t_ast));
     echo_fail->type = NODE_CMD;
     echo_fail->cmd.args = make_args(2, "echo", "fail");
-	echo_fail->left = NULL;
-	echo_fail->right = NULL;
-
-    // ls && echo "ok"
-    t_ast *and_node = malloc(sizeof(t_ast));
+	echo_fail->cmd.fd_in = STDIN_FILENO;
+	echo_fail->cmd.fd_out = STDOUT_FILENO;
+	echo_fail->children = NULL;
+	echo_fail->file = NULL;
+	
+    t_ast *and_node;
+	and_node = malloc(sizeof(t_ast));
     and_node->type = NODE_AND_IF;
-    and_node->left = ls;
-    and_node->right = echo_ok;
+	and_node->children = (t_ast **) malloc(3 * sizeof(t_ast));
+	and_node->children[0] = cat;
+    and_node->children[1] = echo_ok;
+	and_node->children[2] = NULL;
+	and_node->file = NULL;
 
-    // (ls && echo "ok") || echo "fail"
-    t_ast *or_node = malloc(sizeof(t_ast));
+    t_ast *or_node;
+	or_node = malloc(sizeof(t_ast));
     or_node->type = NODE_OR_IF;
-    or_node->left = and_node;
-    or_node->right = echo_fail;
+	or_node->children = (t_ast **) malloc(3 * sizeof(t_ast));
+    or_node->children[0] = and_node;
+    or_node->children[1] = echo_fail;
+	or_node->children[2] = NULL;
+	or_node->file = NULL;
 
-    return or_node;
+	return (or_node);
 }
+*/
 
 char	**get_paths(void)
 {
