@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/09 15:21:52 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:23:32 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,13 +171,3 @@ t_ast	*make_ast(void)
 	return (or_node);
 }
 */
-
-char	**get_paths(void)
-{
-	char	**paths;
-	char	*all_paths;
-
-	all_paths = getenv("PATH");
-	paths = ft_split_path(all_paths, ':');	// need to secure those functions
-	return (paths);
-}

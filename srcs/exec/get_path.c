@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:37:48 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/07 14:07:49 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:23:39 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,14 @@ void	get_cmd_path(t_cmd *cmd, char **paths)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(name, 2);
 	ft_putstr_fd(": command not found\n", 2);
+}
+
+char	**get_paths(void)
+{
+	char	**paths;
+	char	*all_paths;
+
+	all_paths = getenv("PATH");
+	paths = ft_split_path(all_paths, ':');	// need to secure those functions
+	return (paths);
 }
