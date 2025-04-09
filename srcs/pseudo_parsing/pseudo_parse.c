@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/08 13:20:17 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:21:52 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,36 @@ char **make_args(int count, ...) {
     return argv;
 }
 
-/* cat file | grep foo */
+/*
+t_ast	*make_ast(void)
+{
+	t_ast	*sleep;
+	sleep = (t_ast *) malloc(sizeof(t_ast));
+	sleep->type = NODE_CMD;
+	sleep->cmd.args = make_args(2, "sleep", "5");
+	sleep->cmd.fd_in = STDIN_FILENO;
+	sleep->cmd.fd_out = STDOUT_FILENO;
+	sleep->children = NULL;
+	sleep->file = NULL;
+
+	t_ast	*pipe;
+	pipe = (t_ast *) malloc(sizeof(t_ast));
+	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
+	pipe->children = (t_ast **) malloc(7 * sizeof(t_ast *));
+	pipe->children[0] = sleep;
+	pipe->children[1] = sleep;
+	pipe->children[2] = sleep;
+	pipe->children[3] = sleep;
+	pipe->children[4] = sleep;
+	pipe->children[5] = NULL;
+	pipe->file = NULL;
+
+	return (pipe);
+}
+*/
+
+/* cat file | grep foo | grep bar | grep foobar | wc -l */
 t_ast	*make_ast(void)
 {
     t_ast	*cat;
@@ -48,7 +77,6 @@ t_ast	*make_ast(void)
 	grep->children = NULL;
 	grep->file = NULL;
 
-	/*
 	t_ast	*grep_bar;
 	grep_bar = (t_ast *) malloc(sizeof(t_ast));
 	grep_bar->type = NODE_CMD;
@@ -57,7 +85,15 @@ t_ast	*make_ast(void)
 	grep_bar->cmd.fd_out = STDOUT_FILENO;
 	grep_bar->children = NULL;
 	grep_bar->file = NULL;
-	*/
+
+	t_ast	*grep_foobar;
+	grep_foobar = (t_ast *) malloc(sizeof(t_ast));
+	grep_foobar->type = NODE_CMD;
+	grep_foobar->cmd.args = make_args(2, "grep", "foobar");
+	grep_foobar->cmd.fd_in = STDIN_FILENO;
+	grep_foobar->cmd.fd_out = STDOUT_FILENO;
+	grep_foobar->children = NULL;
+	grep_foobar->file = NULL;
 
 	t_ast	*wc;
 	wc = (t_ast *) malloc(sizeof(t_ast));
@@ -72,12 +108,13 @@ t_ast	*make_ast(void)
 	pipe = (t_ast *) malloc(sizeof(t_ast));
 	pipe->type = NODE_PIPE;
 	pipe->cmd.args = NULL;
-	pipe->children = (t_ast **) malloc(4 * sizeof(t_ast *));
+	pipe->children = (t_ast **) malloc(6 * sizeof(t_ast *));
 	pipe->children[0] = cat;
 	pipe->children[1] = grep;
-//	pipe->children[2] = grep_bar;
-	pipe->children[2] = wc;
-	pipe->children[3] = NULL;
+	pipe->children[2] = grep_bar;
+	pipe->children[3] = grep_foobar;
+	pipe->children[4] = wc;
+	pipe->children[5] = NULL;
 	pipe->file = NULL;
 
 	return (pipe);
