@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:54:50 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 10:41:35 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:43:53 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,5 @@ int	make_redir_append(t_ast *redir, char **paths, char **envp)
 		cmd->cmd.fd_out = open(redir->file, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	if (cmd->cmd.fd_out < 0)
 		perror(redir->file);
-	close(cmd->cmd.fd_out);
 	return (exec_ast(redir->children[0], paths, envp));
 }

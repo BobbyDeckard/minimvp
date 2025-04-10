@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 10:15:08 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:43:23 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_ast	*make_ast(void)
 
 	t_ast	*out;
 	out = (t_ast *) malloc(sizeof(t_ast));
-	out->type = NODE_REDIR_OUT;
+	out->type = NODE_REDIR_APPEND;
 	out->children = (t_ast **) malloc(2 * sizeof(t_ast *));
 	out->children[0] = grep;
 	out->children[1] = NULL;
