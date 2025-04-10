@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/04 16:08:58 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:21:38 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,18 @@ void	get_cmd_path(t_cmd *cmd, char **paths);
 int		exec_ast(t_ast *ast, char **paths, char **envp);
 int		exec_cmd(t_cmd cmd, char **paths, char **envp);
 int		exec_pipe(t_ast **children, char **paths, char **envp);
-int		make_redir_append(t_ast *redir, t_ast *child, char **paths, char **envp);
-int		make_redir_in(t_ast *redir, t_ast *child, char **paths, char **envp);
-int		make_redir_out(t_ast *redir, t_ast *child, char **paths, char **envp);
+int		make_redir_append(t_ast *redir, char **paths, char **envp);
+int		make_redir_in(t_ast *redir, char **paths, char **envp);
+int		make_redir_out(t_ast *redir, char **paths, char **envp);
 
 /* Utilities functions */
 void	print_tree(t_ast ast);
+
+/* Pipe functions */
+void	close_pipes(int fd[2][2]);
+void	waitpids(int *pids, int count);
+int		count_commands(t_ast **children);
+int		make_fork(void);
+int		make_pipe(int fd[2]);
 
 #endif

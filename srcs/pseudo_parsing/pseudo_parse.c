@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/09 15:23:32 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:15:08 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,38 @@ t_ast	*make_ast(void)
 }
 */
 
-/* cat file | grep foo | grep bar | grep foobar | wc -l */
+/* < infile grep foo > outfile */
+t_ast	*make_ast(void)
+{
+	t_ast	*grep;
+	grep = (t_ast *) malloc(sizeof(t_ast));
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "foo");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = NULL;
+	grep->file = NULL;
+
+	t_ast	*out;
+	out = (t_ast *) malloc(sizeof(t_ast));
+	out->type = NODE_REDIR_OUT;
+	out->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	out->children[0] = grep;
+	out->children[1] = NULL;
+	out->file = "outfile";
+
+	t_ast	*in;
+	in = (t_ast *) malloc(sizeof(t_ast));
+	in->type = NODE_REDIR_IN;
+	in->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	in->children[0] = out;
+	in->children[1] = NULL;
+	in->file = "infile";
+
+	return (in);
+}
+
+/* cat file | grep foo | grep bar | grep foobar | wc -l
 t_ast	*make_ast(void)
 {
     t_ast	*cat;
@@ -119,6 +150,7 @@ t_ast	*make_ast(void)
 
 	return (pipe);
 }
+*/
 
 /* cat file && echo "ok" || echo "fail"
 t_ast	*make_ast(void)

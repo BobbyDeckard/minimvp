@@ -6,11 +6,28 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/03 19:54:39 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:39:16 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
+
+void	close_fds2(t_cmd cmd)
+{
+	if (cmd.fd_in != STDIN_FILENO)
+		close(cmd.fd_in);
+	if (cmd.fd_out != STDOUT_FILENO)
+		close(cmd.fd_out);
+}
+
+void	dup_fds2(t_cmd cmd)
+{
+	if (cmd.fd_in != STDIN_FILENO)
+		dup2(cmd.fd_in, STDIN_FILENO);
+	if (cmd.fd_out != STDOUT_FILENO)
+		dup2(cmd.fd_out, STDOUT_FILENO);
+	close_fds2(cmd);
+}
 
 int	exec_cmd(t_cmd cmd, char **paths, char **envp)
 {
@@ -23,9 +40,11 @@ int	exec_cmd(t_cmd cmd, char **paths, char **envp)
 		pid = -1;
 	if (pid == 0 && cmd.fd_in != -1 && cmd.fd_out != -1)
 	{
-		if (!execve(cmd.path, cmd.args, envp))
+		dup_fds2(cmd);
+		if (execve(cmd.path, cmd.args, envp) == -1)
 			return (FAILURE);
 	}
+	close_fds2(cmd);
 	waitpid(pid, NULL, 0);
 	return (SUCCESS);
 }
@@ -70,10 +89,10 @@ int	exec_ast(t_ast *ast, char **paths, char **envp)
 	else if (ast->type == NODE_PIPE && ast->children)
 		return (exec_pipe(ast->children, paths, envp));
 	else if (ast->type == NODE_REDIR_IN && ast->children)
-		return (make_redir_in(ast, ast->children[0], paths, envp));
+		return (make_redir_in(ast, paths, envp));
 	else if (ast->type == NODE_REDIR_OUT && ast->children)
-		return (make_redir_out(ast, ast->children[0], paths, envp));
+		return (make_redir_out(ast, paths, envp));
 	else if (ast->type == NODE_REDIR_APPEND && ast->children)
-		return (make_redir_append(ast, ast->children[0], paths, envp));
+		return (make_redir_append(ast, paths, envp));
 	return (FAILURE);
 }
