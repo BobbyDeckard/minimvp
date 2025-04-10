@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:54:50 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 10:28:37 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:41:35 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int	make_redir_in(t_ast *redir, char **paths, char **envp)
 		cmd->cmd.fd_in = open(redir->file, O_RDONLY);
 	if (cmd->cmd.fd_in < 0)
 		perror(redir->file);
-//	close(cmd->cmd.fd_in);
-	printf("Redir in done\n");
 	return (exec_ast(redir->children[0], paths, envp));
 }
 
@@ -46,8 +44,6 @@ int	make_redir_out(t_ast *redir, char **paths, char **envp)
 		cmd->cmd.fd_out = open(redir->file, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (cmd->cmd.fd_out < 0)
 		perror(redir->file);
-//	close(cmd->cmd.fd_out);
-	printf("Redir out done\n");
 	return (exec_ast(redir->children[0], paths, envp));
 }
 
