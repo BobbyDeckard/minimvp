@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 10:21:38 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:10:01 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void	print_tree(t_ast ast);
 
 /* Pipe functions */
 void	close_pipes(int fd[2][2]);
-void	waitpids(int *pids, int count);
 int		count_commands(t_ast **children);
 int		make_fork(void);
 int		make_pipe(int fd[2]);
+int		waitpids(int *pids, int count);
 
 #endif

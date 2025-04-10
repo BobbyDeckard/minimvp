@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/04/04 15:51:10 by imeulema         ###   ########.fr        #
+#    Updated: 2025/04/10 11:54:46 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ EXEC = $(addprefix exec/, $(EXEC_FILES))
 EXEC_FILES = exec.c \
 			 exec_pipe.c \
 			 get_path.c \
+			 pipe_utils.c \
 			 redir.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = print.c

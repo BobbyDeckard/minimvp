@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 10:39:16 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:38:48 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	dup_fds2(t_cmd cmd)
 
 int	exec_cmd(t_cmd cmd, char **paths, char **envp)
 {
+	int	status;
 	int	pid;
 
 	get_cmd_path(&cmd, paths);
@@ -45,8 +46,12 @@ int	exec_cmd(t_cmd cmd, char **paths, char **envp)
 			return (FAILURE);
 	}
 	close_fds2(cmd);
-	waitpid(pid, NULL, 0);
-	return (SUCCESS);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	else
+		status = -1;
+	return (status);
 }
 
 // For following two functions, not sure which value to return.

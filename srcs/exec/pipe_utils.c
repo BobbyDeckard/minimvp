@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:56:56 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 09:58:32 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:39:57 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,19 @@ int	make_pipe(int fd[2])
 	return (1);
 }
 
-void	waitpids(int *pids, int cmd_count)
+int	waitpids(int *pids, int cmd_count)
 {
+	int status;
 	int	i;
 
 	i = -1;
 	while (++i < cmd_count)
-		waitpid(pids[i], NULL, 0);
+		waitpid(pids[i], &status, 0);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	else
+		status = -1;
+	return (status);
 }
 
 int	count_commands(t_ast **children)

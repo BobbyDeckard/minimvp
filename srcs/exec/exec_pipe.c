@@ -6,83 +6,11 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/09 12:58:56 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:23:59 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
-
-void	waitpids(int *pids, int cmd_count)
-{
-	int	i;
-
-	i = -1;
-	while (++i < cmd_count)
-		waitpid(pids[i], NULL, 0);
-}
-
-int	count_commands(t_ast **children)
-{
-	int	i;
-
-	i = 0;
-	while (children[i])
-		i++;
-	return (i);
-}
-
-int	make_fork(void)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		exit(1);
-	}
-	return (pid);
-}
-
-void	make_pipes(int fd[2][2])
-{
-	if (pipe(fd[0]) == -1)
-	{
-		perror("pipe");
-		exit (1);
-	}
-	if (pipe(fd[1]) == -1)
-	{
-		perror("pipe");
-		close(fd[0][0]);
-		close(fd[0][1]);
-		exit(1);
-	}
-}
-
-void	close_pipes(int fd[2][2])
-{
-	close(fd[0][0]);
-	close(fd[0][1]);
-	close(fd[1][0]);
-	close(fd[1][1]);
-}
-
-void	overcomplicated_close_pipes(int fd[2][2], int count, int i)
-{
-	if (i + 3 == count)
-		close(fd[(count + 1) % 2][1]);	// closing the penultimate pipe's write end
-										// when executing the 3rd to last cmd
-	else if (i + 2 == count)
-	{
-		close(fd[(count + 1) % 2][0]);	// closing the penultimate pipe's read end
-		close(fd[count % 2][1]);		// closing the last pipe's write end when
-										// executing the 2nd to last cmd
-	}
-	else if (i + 1 == count)
-		close(fd[count % 2][0]);		// closing the last pipe's read end when
-										// executing the last cmd
-}
 
 void	dup_fds(t_cmd *cmd)
 {
@@ -100,16 +28,6 @@ void	set_fds(t_ast *cmd1, t_ast *cmd2, int fd[2])
 		cmd2->cmd.fd_in = fd[0];
 }
 
-int	make_pipe(int fd[2])
-{
-	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit (1);
-	}
-	return (1);
-}
-
 int	exec_pipe_cmd(t_cmd cmd, char **paths, char **envp)
 {
 	get_cmd_path(&cmd, paths);
@@ -123,7 +41,7 @@ int	exec_pipe_cmd(t_cmd cmd, char **paths, char **envp)
 	return (SUCCESS);
 }
 
-void	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
+int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 {
 	int	fd[2][2];
 	int	i;
@@ -144,24 +62,25 @@ void	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 			if ((children[i])->type == NODE_CMD)
 				exec_pipe_cmd((children[i])->cmd, paths, envp);
 			else if (children[i])
-				exec_ast(children[i], paths, envp);
+				return (exec_ast(children[i], paths, envp));
 		}
 		if (i != 0)
 			close(fd[(i + 1) % 2][0]);
 		if (i + 1 < count)
 			close(fd[i % 2][1]);
 	}
-	waitpids(pids, count);
+	return (waitpids(pids, count));
 }
 
 int	exec_pipe(t_ast **children, char **paths, char **envp)
 {
 	int	*pids;
+	int	status;
 	int	count;
 
 	count = count_commands(children);
 	pids = (int *) malloc(count * sizeof(int));
-	run_pipe(children, paths, envp, pids, count);
+	status = run_pipe(children, paths, envp, pids, count);
 	free(pids);
-	return (SUCCESS);
+	return (status);
 }
