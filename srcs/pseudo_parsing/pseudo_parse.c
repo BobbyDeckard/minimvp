@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 12:42:55 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:49:11 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,40 @@ char **make_args(int count, ...) {
     return argv;
 }
 
-/* Logical operators */
+/* Simple pipe */
+t_ast	*make_ast(void)
+{
+	t_ast	*cat;
+	cat = (t_ast *) malloc(sizeof(t_ast));
+	cat->type = NODE_CMD;
+	cat->cmd.args = make_args(2, "cat", "file");
+	cat->cmd.fd_in = STDIN_FILENO;
+	cat->cmd.fd_out = STDOUT_FILENO;
+	cat->children = NULL;
+	cat->file = NULL;
+
+	t_ast	*grep;
+	grep = (t_ast *) malloc(sizeof(t_ast));
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "foo");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = NULL;
+	grep->file = NULL;
+
+	t_ast	*pipe;
+	pipe = (t_ast *) malloc(sizeof(t_ast));
+	pipe->type = NODE_PIPE;
+	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	pipe->children[0] = cat;
+	pipe->children[1] = grep;
+	pipe->children[2] = NULL;
+	pipe->file = NULL;
+
+	return (pipe);
+}
+
+/* Logical operators
 t_ast	*make_ast(void)
 {
 	t_ast	*cat;
@@ -57,11 +90,29 @@ t_ast	*make_ast(void)
 	echo_fail->children = NULL;
 	echo_fail->file = NULL;
 
+	t_ast	*grep;
+	grep = (t_ast *) malloc(sizeof(t_ast));
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "foo");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = NULL;
+	grep->file = NULL;
+
+	t_ast	*pipe;
+	pipe = (t_ast *) malloc(sizeof(t_ast));
+	pipe->type = NODE_PIPE;
+	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	pipe->children[0] = cat;
+	pipe->children[1] = grep;
+	pipe->children[2] = NULL;
+	pipe->file = NULL;
+
 	t_ast	*and;
 	and = (t_ast *) malloc(sizeof(t_ast));
 	and->type = NODE_AND_IF;
 	and->children = (t_ast **) malloc(3 * sizeof(t_ast *));
-	and->children[0] = cat;
+	and->children[0] = pipe;
 	and->children[1] = echo_ok;
 	and->children[2] = NULL;
 	and->file = NULL;
@@ -77,6 +128,7 @@ t_ast	*make_ast(void)
 
 	return (or);
 }
+*/
 
 /* multiple sleep
 t_ast	*make_ast(void)
