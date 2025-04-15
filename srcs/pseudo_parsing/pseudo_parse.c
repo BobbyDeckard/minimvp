@@ -6,13 +6,12 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:02:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 12:49:11 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/15 10:24:08 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-#include <string.h>
 char **make_args(int count, ...) {
 	// DO NOT SUBMIT THIS FILE
     va_list args;
@@ -27,7 +26,7 @@ char **make_args(int count, ...) {
     return argv;
 }
 
-/* Simple pipe */
+/* Simple pipe
 t_ast	*make_ast(void)
 {
 	t_ast	*cat;
@@ -48,19 +47,40 @@ t_ast	*make_ast(void)
 	grep->children = NULL;
 	grep->file = NULL;
 
+	t_ast	*grep_bar;
+	grep_bar = (t_ast *) malloc(sizeof(t_ast));
+	grep_bar->type = NODE_CMD;
+	grep_bar->cmd.args = make_args(2, "grep", "bar");
+	grep_bar->cmd.fd_in = STDIN_FILENO;
+	grep_bar->cmd.fd_out = STDOUT_FILENO;
+	grep_bar->children = NULL;
+	grep_bar->file = NULL;
+
+	t_ast	*wc;
+	wc = (t_ast *) malloc(sizeof(t_ast));
+	wc->type = NODE_CMD;
+	wc->cmd.args = make_args(2, "wc", "-w");
+	wc->cmd.fd_in = STDIN_FILENO;
+	wc->cmd.fd_out = STDOUT_FILENO;
+	wc->children = NULL;
+	wc->file = NULL;
+
 	t_ast	*pipe;
 	pipe = (t_ast *) malloc(sizeof(t_ast));
 	pipe->type = NODE_PIPE;
-	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	pipe->children = (t_ast **) malloc(5 * sizeof(t_ast *));
 	pipe->children[0] = cat;
 	pipe->children[1] = grep;
-	pipe->children[2] = NULL;
+//	pipe->children[2] = grep_bar;
+//	pipe->children[3] = wc;
+	pipe->children[3] = NULL;
 	pipe->file = NULL;
 
 	return (pipe);
 }
+*/
 
-/* Logical operators
+/* Logical operators: ((cat file | grep foo) && echo ok) || echo fail */
 t_ast	*make_ast(void)
 {
 	t_ast	*cat;
@@ -128,7 +148,69 @@ t_ast	*make_ast(void)
 
 	return (or);
 }
-*/
+
+//(ls -l | grep minishell) && echo "Found" || echo "Not found"
+/*t_ast	*make_ast(void)
+{
+	t_ast	*ls = malloc(sizeof(t_ast));
+	ls->type = NODE_CMD;
+	ls->cmd.args = make_args(2, "ls", "-l");
+	ls->cmd.fd_in = STDIN_FILENO;
+	ls->cmd.fd_out = STDOUT_FILENO;
+	ls->children = NULL;
+	ls->file = NULL;
+
+	t_ast	*grep = malloc(sizeof(t_ast));
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "minishell");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = NULL;
+	grep->file = NULL;
+
+	t_ast	*echo_found = malloc(sizeof(t_ast));
+	echo_found->type = NODE_CMD;
+	echo_found->cmd.args = make_args(2, "echo", "Found");
+	echo_found->cmd.fd_in = STDIN_FILENO;
+	echo_found->cmd.fd_out = STDOUT_FILENO;
+	echo_found->children = NULL;
+	echo_found->file = NULL;
+
+	t_ast	*echo_not_found = malloc(sizeof(t_ast));
+	echo_not_found->type = NODE_CMD;
+	echo_not_found->cmd.args = make_args(2, "echo", "Not found");
+	echo_not_found->cmd.fd_in = STDIN_FILENO;
+	echo_not_found->cmd.fd_out = STDOUT_FILENO;
+	echo_not_found->children = NULL;
+	echo_not_found->file = NULL;
+
+	t_ast	*pipe = malloc(sizeof(t_ast));
+	pipe->type = NODE_PIPE;
+	pipe->children = malloc(3 * sizeof(t_ast *));
+	pipe->children[0] = ls;
+	pipe->children[1] = grep;
+	pipe->children[2] = NULL;
+	pipe->file = NULL;
+
+	t_ast	*and = malloc(sizeof(t_ast));
+	and->type = NODE_AND_IF;
+	and->children = malloc(3 * sizeof(t_ast *));
+	and->children[0] = pipe;
+	and->children[1] = echo_found;
+	and->children[2] = NULL;
+	and->file = NULL;
+
+	t_ast	*or = malloc(sizeof(t_ast));
+	or->type = NODE_OR_IF;
+	or->children = malloc(3 * sizeof(t_ast *));
+	or->children[0] = and;
+	or->children[1] = echo_not_found;
+	or->children[2] = NULL;
+	or->file = NULL;
+
+	return (or);
+}*/
+
 
 /* multiple sleep
 t_ast	*make_ast(void)

@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 12:38:48 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:11:28 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ int	exec_cmd(t_cmd cmd, char **paths, char **envp)
 	if (cmd.path)
 		pid = fork();
 	else
-		pid = -1;
+	{
+		close_fds2(cmd);
+		return (FAILURE);
+	}
 	if (pid == 0 && cmd.fd_in != -1 && cmd.fd_out != -1)
 	{
 		dup_fds2(cmd);
@@ -61,11 +64,13 @@ int	exec_or_if(t_ast **children, char **paths, char **envp)
 {
 	int	i;
 
+//	printf("Entering OR_IF node\n");
 	i = -1;
 	while (children[++i])
 	{
 		if (exec_ast(children[i], paths, envp) == SUCCESS)
 			return (SUCCESS);
+//		printf("Pursuing OR_IF iterations, i = %d\n", i);
 	}
 	return (FAILURE);
 }
@@ -74,11 +79,13 @@ int	exec_and_if(t_ast **children, char **paths, char **envp)
 {
 	int	i;
 
+//	printf("Entering AND_IF node\n");
 	i = -1;
 	while (children[++i])
 	{
 		if (exec_ast(children[i], paths, envp) == FAILURE)
 			return (FAILURE);
+//		printf("Pursuing AND_IF iterations, i = %d\n", i);
 	}
 	return (SUCCESS);
 }

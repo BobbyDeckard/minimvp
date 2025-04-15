@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:56:56 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 12:39:57 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/15 10:23:16 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	make_pipe(int fd[2])
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		exit (1);
+		exit(1);
 	}
 	return (1);
 }
@@ -60,10 +60,10 @@ int	count_commands(t_ast **children)
 	return (i);
 }
 
-void	close_pipes(int fd[2][2])
+void	close_pipes(int fd[2][2], int i, int count)
 {
-	close(fd[0][0]);
-	close(fd[0][1]);
-	close(fd[1][0]);
-	close(fd[1][1]);
+	if (i + 1 < count)
+		close(fd[i % 2][1]);
+	if (i > 0)
+		close(fd[(i + 1) % 2][0]);
 }

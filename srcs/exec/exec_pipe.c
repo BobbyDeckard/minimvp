@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 12:23:59 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/15 10:24:06 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,33 @@
 void	dup_fds(t_cmd *cmd)
 {
 	if (cmd->fd_in != STDIN_FILENO)
-		dup2(cmd->fd_in, STDIN_FILENO);
+	{
+		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2: fd_in");
+			exit(1);
+		}
+	}
 	if (cmd->fd_out != STDOUT_FILENO)
-		dup2(cmd->fd_out, STDOUT_FILENO);
+	{
+		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		{
+			perror("dup2: fd_out");
+			exit(1);
+		}
+	}
 }
 
-void	set_fds(t_ast *cmd1, t_ast *cmd2, int fd[2])
-{
-	if (cmd1)
-		cmd1->cmd.fd_out = fd[1];
-	if (cmd2)
-		cmd2->cmd.fd_in = fd[0];
-}
-
-int	exec_pipe_cmd(t_cmd cmd, char **paths, char **envp)
+void	exec_pipe_cmd(t_cmd cmd, char **paths, char **envp)
 {
 	get_cmd_path(&cmd, paths);
 	if (!cmd.path)
-		return (FAILURE);
+		exit(1);
 	if (execve(cmd.path, cmd.args, envp) == -1)
 	{
 		perror("execve");
 		exit(1);
 	}
-	return (SUCCESS);
 }
 
 int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
@@ -58,16 +61,13 @@ int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 		if (pids[i] == 0)
 		{
 			dup_fds(&children[i]->cmd);
-			close_pipes(fd);
-			if ((children[i])->type == NODE_CMD)
-				exec_pipe_cmd((children[i])->cmd, paths, envp);
+			close_pipes(fd, i, count);
+			if (children[i]->type == NODE_CMD)
+				exec_pipe_cmd(children[i]->cmd, paths, envp);
 			else if (children[i])
 				return (exec_ast(children[i], paths, envp));
 		}
-		if (i != 0)
-			close(fd[(i + 1) % 2][0]);
-		if (i + 1 < count)
-			close(fd[i % 2][1]);
+		close_pipes(fd, i, count);
 	}
 	return (waitpids(pids, count));
 }

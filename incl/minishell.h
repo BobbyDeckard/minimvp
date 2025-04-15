@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 12:10:01 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/15 10:23:30 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,21 @@ int		make_redir_out(t_ast *redir, char **paths, char **envp);
 
 /* Utilities functions */
 void	print_tree(t_ast ast);
+char	*make_cwd(void);
 
 /* Pipe functions */
-void	close_pipes(int fd[2][2]);
+void	close_pipes(int fd[2][2], int i, int count);
 int		count_commands(t_ast **children);
 int		make_fork(void);
 int		make_pipe(int fd[2]);
 int		waitpids(int *pids, int count);
+
+
+#include <string.h>
+
+t_ast	*parse_command(char **tokens, int *i);
+t_ast	*parse_pipe(char **tokens, int *i);
+t_ast	*parse_and_or(char **tokens, int *i);
+t_ast	*make_ast_from_input(const char *input);
 
 #endif

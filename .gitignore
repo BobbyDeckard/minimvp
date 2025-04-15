@@ -1,4 +1,4 @@
-# Prerequisites
+t Prerequisites
 *.d
 
 # Object files
@@ -42,6 +42,8 @@ minimvp
 *.su
 *.idb
 *.pdb
+srcs/pseudo_parsing/gpt_parsing.c
+srcs/utils/cwd.c
 
 # Kernel Module Compile Results
 *.mod*
