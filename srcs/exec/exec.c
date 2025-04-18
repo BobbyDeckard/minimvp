@@ -29,48 +29,55 @@ void	dup_fds2(t_cmd cmd)
 	close_fds2(cmd);
 }
 
-int	exec_cmd(t_cmd cmd, char **paths, char **envp)
+void	exec_cmd(t_cmd cmd, char **paths, char **envp)
+{
+	get_cmd_path(&cmd, paths);
+	if (!cmd.path)
+	{
+		ft_putstr_fd(cmd.args[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(1);
+	}
+	if (execve(cmd.path, cmd.args, envp) == -1)
+	{
+		perror("execve");
+		exit(1);
+	}
+}
+
+int	run_cmd(t_cmd cmd, char **paths, char **envp)
 {
 	int	status;
 	int	pid;
 
-	get_cmd_path(&cmd, paths);
-	if (cmd.path)
-		pid = fork();
-	else
+	status = -1;
+	pid = fork();
+	if (pid < 0)
 	{
-		close_fds2(cmd);
+		perror("fork");
 		return (FAILURE);
 	}
-	if (pid == 0 && cmd.fd_in != -1 && cmd.fd_out != -1)
+	if (pid == 0)
 	{
 		dup_fds2(cmd);
-		if (execve(cmd.path, cmd.args, envp) == -1)
-			return (FAILURE);
+		exec_cmd(cmd, paths, envp);
 	}
 	close_fds2(cmd);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
-	else
-		status = -1;
 	return (status);
 }
 
-// For following two functions, not sure which value to return.
-// Need to do some testing on which command's exit status is returned to
-// the previous node.
 int	exec_or_if(t_ast **children, char **paths, char **envp)
 {
 	int	i;
 
-//	printf("Entering OR_IF node\n");
 	i = -1;
 	while (children[++i])
 	{
 		if (exec_ast(children[i], paths, envp) == SUCCESS)
 			return (SUCCESS);
-//		printf("Pursuing OR_IF iterations, i = %d\n", i);
 	}
 	return (FAILURE);
 }
@@ -79,13 +86,11 @@ int	exec_and_if(t_ast **children, char **paths, char **envp)
 {
 	int	i;
 
-//	printf("Entering AND_IF node\n");
 	i = -1;
 	while (children[++i])
 	{
-		if (exec_ast(children[i], paths, envp) == FAILURE)
+		if (exec_ast(children[i], paths, envp) != SUCCESS)
 			return (FAILURE);
-//		printf("Pursuing AND_IF iterations, i = %d\n", i);
 	}
 	return (SUCCESS);
 }
@@ -93,7 +98,7 @@ int	exec_and_if(t_ast **children, char **paths, char **envp)
 int	exec_ast(t_ast *ast, char **paths, char **envp)
 {
 	if (ast->type == NODE_CMD)
-		return (exec_cmd(ast->cmd, paths, envp));
+		return (run_cmd(ast->cmd, paths, envp));
 	else if (ast->type == NODE_OR_IF && ast->children)
 		return (exec_or_if(ast->children, paths, envp));
 	else if (ast->type == NODE_AND_IF && ast->children)

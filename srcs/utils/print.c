@@ -48,6 +48,11 @@ void	print_node_info(t_ast node)
 	int	i;
 
 	print_node_type(node);
+	if (node.parent)
+	{
+		printf("Parent: ");
+		print_node_type(*node.parent);
+	}
 	if (node.cmd.path)
 		printf("Path:\n\t%s\n", node.cmd.path);
 	if (node.cmd.args)

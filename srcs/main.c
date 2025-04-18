@@ -12,6 +12,8 @@
 
 #include "../incl/minishell.h"
 
+void	set_parents(t_ast *ast);
+
 // La gestion des erreurs n'a pas encore été implémentée
 int main(int ac, char **av, char **envp)
 {
@@ -22,7 +24,11 @@ int main(int ac, char **av, char **envp)
 	(void) av;
 	paths = get_paths();
 	ast = make_ast();
-	exec_ast(ast, paths, envp);
+	(void) envp;
+	(void) paths;
+	set_parents(ast);
+	print_tree(*ast);
+//	exec_ast(ast, paths, envp);
 	return (0);
 }
 

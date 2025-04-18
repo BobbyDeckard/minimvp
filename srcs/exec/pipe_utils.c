@@ -40,13 +40,12 @@ int	waitpids(int *pids, int cmd_count)
 	int status;
 	int	i;
 
+	status = -1;
 	i = -1;
 	while (++i < cmd_count)
 		waitpid(pids[i], &status, 0);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
-	else
-		status = -1;
 	return (status);
 }
 

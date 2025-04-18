@@ -26,8 +26,55 @@ char **make_args(int count, ...) {
     return argv;
 }
 
-/* (cat file | grep foo | wc -l > outfile && echo "The number of lines containing foo in file is:" &&
- * cat outfile) || echo "Fail" */
+void	set_parents(t_ast *ast)
+{
+	int	i;
+
+	if (ast->children)
+	{
+		i = -1;
+		while (ast->children[++i])
+		{
+			ast->children[i]->parent = ast;
+			set_parents(ast->children[i]);
+		}
+	}
+}
+
+/* DEMOS */
+
+/*
+// Redirections
+t_ast	*make_ast(void)
+{
+	t_ast	*cmd;
+	cmd = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd)
+		exit(1);
+	cmd->type = NODE_CMD;
+	cmd->cmd.args = make_args(2, "grep", "foo");
+	cmd->cmd.fd_in = STDIN_FILENO;
+	cmd->cmd.fd_out = STDOUT_FILENO;
+	cmd->children = NULL;
+	cmd->file = NULL;
+
+	t_ast	*redir;
+	redir = (t_ast *) malloc(sizeof(t_ast));
+	if (!redir)
+		exit(1);
+	redir->type = NODE_REDIR_IN;
+	redir->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!redir->children)
+		exit(1);
+	redir->children[0] = cmd;
+	redir->children[1] = NULL;
+	redir->file = "file";
+
+	return (redir);
+}
+*/
+
+// (cat file | grep foo | wc -l > outfile && echo "The number of lines containing foo in file is:" && cat outfile) || echo "Fail"
 t_ast	*make_ast(void)
 {
 	t_ast	*cat_file;
@@ -203,18 +250,54 @@ t_ast	*make_ast(void)
 	wc->children = NULL;
 	wc->file = NULL;
 
+	t_ast	*out;
+	out = (t_ast *) malloc(sizeof(t_ast));
+	if (!out)
+		exit(1);
+	out->type = NODE_REDIR_OUT;
+	out->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!out->children)
+		exit(1);
+	out->children[0] = wc;
+	out->children[1] = NULL;
+	out->file = "outfile";
+
+	t_ast	*echo;
+	echo = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo)
+		exit(1);
+	echo->type = NODE_CMD;
+	echo->cmd.args = make_args(2, "echo", "ok");
+	echo->cmd.fd_in = STDIN_FILENO;
+	echo->cmd.fd_out = STDOUT_FILENO;
+	echo->children = NULL;
+	echo->file = NULL;
+
 	t_ast	*pipe;
 	pipe = (t_ast *) malloc(sizeof(t_ast));
 	pipe->type = NODE_PIPE;
 	pipe->children = (t_ast **) malloc(5 * sizeof(t_ast *));
 	pipe->children[0] = cat;
 	pipe->children[1] = grep;
-//	pipe->children[2] = grep_bar;
-//	pipe->children[3] = wc;
-	pipe->children[3] = NULL;
+	pipe->children[2] = grep_bar;
+	pipe->children[3] = out;
+	pipe->children[4] = NULL;
 	pipe->file = NULL;
 
-	return (pipe);
+	t_ast	*and;
+	and = (t_ast *) malloc(sizeof(t_ast));
+	if (!and)
+		exit(1);
+	and->type = NODE_AND_IF;
+	and->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!and->children)
+		exit(1);
+	and->children[0] = pipe;
+	and->children[1] = echo;
+	and->children[2] = NULL;
+	and->file = NULL;
+
+	return (and);
 }
 */
 

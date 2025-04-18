@@ -32,18 +32,6 @@ void	dup_fds(t_cmd *cmd)
 	}
 }
 
-void	exec_pipe_cmd(t_cmd cmd, char **paths, char **envp)
-{
-	get_cmd_path(&cmd, paths);
-	if (!cmd.path)
-		exit(1);
-	if (execve(cmd.path, cmd.args, envp) == -1)
-	{
-		perror("execve");
-		exit(1);
-	}
-}
-
 int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 {
 	int	fd[2][2];
@@ -63,7 +51,7 @@ int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 			dup_fds(&children[i]->cmd);
 			close_pipes(fd, i, count);
 			if (children[i]->type == NODE_CMD)
-				exec_pipe_cmd(children[i]->cmd, paths, envp);
+				exec_cmd(children[i]->cmd, paths, envp);
 			else if (children[i])
 				return (exec_ast(children[i], paths, envp));
 		}
