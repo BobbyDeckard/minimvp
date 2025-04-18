@@ -47,15 +47,16 @@ typedef enum e_node_type
 /* Structs */
 typedef struct s_cmd
 {
-	char	**args;
-	char	*path;
-	int		fd_in;
-	int		fd_out;
+	char		**args;
+	char		*path;
+	int			fd_in;
+	int			fd_out;
 }	t_cmd;
 
 typedef struct s_ast
 {
 	t_node_type		type;
+	struct s_ast	*parent;
 	struct s_ast	**children;
 	t_cmd			cmd;
 	char			*file;
@@ -67,9 +68,9 @@ char	**ft_split_path(const char *s, char c);
 char	**get_paths(void);
 
 /* Execution functions */
+void	exec_cmd(t_cmd cmd, char **paths, char **envp);
 void	get_cmd_path(t_cmd *cmd, char **paths);
 int		exec_ast(t_ast *ast, char **paths, char **envp);
-int		exec_cmd(t_cmd cmd, char **paths, char **envp);
 int		exec_pipe(t_ast **children, char **paths, char **envp);
 int		make_redir_append(t_ast *redir, char **paths, char **envp);
 int		make_redir_in(t_ast *redir, char **paths, char **envp);
