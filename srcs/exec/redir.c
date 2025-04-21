@@ -27,10 +27,7 @@ int	make_redir_in(t_ast *redir, char **paths, char **envp)
 	if (access(redir->file, F_OK) || access(redir->file, R_OK))
 		cmd->cmd.fd_in = -1;
 	else
-	{
 		cmd->cmd.fd_in = open(redir->file, O_RDONLY);
-		cmd->file = redir->file;
-	}
 	if (cmd->cmd.fd_in < 0)
 		perror(redir->file);
 	return (exec_ast(redir->children[0], paths, envp));
