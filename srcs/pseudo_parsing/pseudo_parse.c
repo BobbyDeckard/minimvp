@@ -43,10 +43,17 @@ void	set_parents(t_ast *ast)
 
 /* DEMOS */
 
-/*
 // Redirections
 t_ast	*make_ast(void)
 {
+	t_ast	*redir;
+	redir = (t_ast *) malloc(sizeof(t_ast));
+	if (!redir)
+		exit(1);
+	redir->type = NODE_REDIR_IN;
+	redir->children = NULL;
+	redir->file = "file";
+
 	t_ast	*cmd;
 	cmd = (t_ast *) malloc(sizeof(t_ast));
 	if (!cmd)
@@ -55,25 +62,17 @@ t_ast	*make_ast(void)
 	cmd->cmd.args = make_args(2, "grep", "foo");
 	cmd->cmd.fd_in = STDIN_FILENO;
 	cmd->cmd.fd_out = STDOUT_FILENO;
-	cmd->children = NULL;
+	cmd->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!cmd->children)
+		exit(1);
+	cmd->children[0] = redir;
+	cmd->children[1] = NULL;
 	cmd->file = NULL;
 
-	t_ast	*redir;
-	redir = (t_ast *) malloc(sizeof(t_ast));
-	if (!redir)
-		exit(1);
-	redir->type = NODE_REDIR_IN;
-	redir->children = (t_ast **) malloc(2 * sizeof(t_ast *));
-	if (!redir->children)
-		exit(1);
-	redir->children[0] = cmd;
-	redir->children[1] = NULL;
-	redir->file = "file";
-
-	return (redir);
+	return (cmd);
 }
-*/
 
+/*
 // (cat file | grep foo | wc -l > outfile && echo "The number of lines containing foo in file is:" && cat outfile) || echo "Fail"
 t_ast	*make_ast(void)
 {
@@ -210,6 +209,7 @@ t_ast	*make_ast(void)
 
 	return (or);
 }
+*/
 
 /* Simple pipe
 t_ast	*make_ast(void)

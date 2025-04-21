@@ -27,8 +27,8 @@ int main(int ac, char **av, char **envp)
 	(void) envp;
 	(void) paths;
 	set_parents(ast);
-	print_tree(*ast);
-//	exec_ast(ast, paths, envp);
+//	print_tree(*ast);
+	exec_ast(ast, paths, envp);
 	return (0);
 }
 

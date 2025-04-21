@@ -70,11 +70,12 @@ char	**get_paths(void);
 /* Execution functions */
 void	exec_cmd(t_cmd cmd, char **paths, char **envp);
 void	get_cmd_path(t_cmd *cmd, char **paths);
+void	make_redirs(t_ast *ast, t_cmd *cmd);
 int		exec_ast(t_ast *ast, char **paths, char **envp);
 int		exec_pipe(t_ast **children, char **paths, char **envp);
-int		make_redir_append(t_ast *redir, char **paths, char **envp);
-int		make_redir_in(t_ast *redir, char **paths, char **envp);
-int		make_redir_out(t_ast *redir, char **paths, char **envp);
+//int		make_redir_append(t_ast *redir, char **paths, char **envp);
+//int		make_redir_in(t_ast *redir, char **paths, char **envp);
+//int		make_redir_out(t_ast *redir, char **paths, char **envp);
 
 /* Utilities functions */
 void	print_tree(t_ast ast);

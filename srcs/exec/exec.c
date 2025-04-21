@@ -12,14 +12,16 @@
 
 #include "../../incl/minishell.h"
 
+// close function only used outside of pipes
 void	close_fds2(t_cmd cmd)
 {
-	if (cmd.fd_in != STDIN_FILENO)
+	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in >= 0)
 		close(cmd.fd_in);
-	if (cmd.fd_out != STDOUT_FILENO)
+	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out >= 0)
 		close(cmd.fd_out);
 }
 
+// only used outside of pipes
 void	dup_fds2(t_cmd cmd)
 {
 	if (cmd.fd_in != STDIN_FILENO)
@@ -45,18 +47,26 @@ void	exec_cmd(t_cmd cmd, char **paths, char **envp)
 	}
 }
 
-int	run_cmd(t_cmd cmd, char **paths, char **envp)
+// only called for a single function outside pipelines
+int	run_cmd(t_ast *ast, char **paths, char **envp)
 {
-	int	status;
-	int	pid;
+	t_cmd	cmd;
+	int		status;
+	int		pid;
 
+	cmd = ast->cmd;
 	status = -1;
+	make_redirs(ast, &cmd);
+	if (cmd.fd_in < 0 || cmd.fd_out < 0)
+	{
+		close_fds2(cmd);
+		return (FAILURE);
+	}
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("fork");
-		return (FAILURE);
-	}
+		return (FAILURE); }
 	if (pid == 0)
 	{
 		dup_fds2(cmd);
@@ -98,18 +108,18 @@ int	exec_and_if(t_ast **children, char **paths, char **envp)
 int	exec_ast(t_ast *ast, char **paths, char **envp)
 {
 	if (ast->type == NODE_CMD)
-		return (run_cmd(ast->cmd, paths, envp));
+		return (run_cmd(ast, paths, envp));
 	else if (ast->type == NODE_OR_IF && ast->children)
 		return (exec_or_if(ast->children, paths, envp));
 	else if (ast->type == NODE_AND_IF && ast->children)
 		return (exec_and_if(ast->children, paths, envp));
 	else if (ast->type == NODE_PIPE && ast->children)
 		return (exec_pipe(ast->children, paths, envp));
-	else if (ast->type == NODE_REDIR_IN && ast->children)
-		return (make_redir_in(ast, paths, envp));
-	else if (ast->type == NODE_REDIR_OUT && ast->children)
-		return (make_redir_out(ast, paths, envp));
-	else if (ast->type == NODE_REDIR_APPEND && ast->children)
-		return (make_redir_append(ast, paths, envp));
+//	else if (ast->type == NODE_REDIR_IN && ast->children)
+//		return (make_redir_in(ast, paths, envp));
+//	else if (ast->type == NODE_REDIR_OUT && ast->children)
+//		return (make_redir_out(ast, paths, envp));
+//	else if (ast->type == NODE_REDIR_APPEND && ast->children)
+//		return (make_redir_append(ast, paths, envp));
 	return (FAILURE);
 }
