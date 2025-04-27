@@ -12,75 +12,22 @@
 
 #include "../../incl/minishell.h"
 
-/*
-t_ast	*get_next_cmd(t_ast *ast)
+void	close_redirs(t_cmd cmd)
 {
-	while (ast && ast->type != NODE_CMD)
-		ast = ast->children[0];
-	return (ast);
+	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in >= 0)
+		close(cmd.fd_in);
+	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out >= 0)
+		close(cmd.fd_out);
 }
 
-int	make_redir_in(t_ast *redir, char **paths, char **envp)
+int	check_redirs(t_cmd cmd)
 {
-	t_ast	*cmd;
-
-	cmd = get_next_cmd(redir);
-	if (access(redir->file, F_OK) || access(redir->file, R_OK))
-		cmd->cmd.fd_in = -1;
-	else
-		cmd->cmd.fd_in = open(redir->file, O_RDONLY);
-	if (cmd->cmd.fd_in < 0)
-		perror(redir->file);
-	return (exec_ast(redir->children[0], paths, envp));
-}
-
-int	make_redir_out(t_ast *redir, char **paths, char **envp)
-{
-	t_ast	*cmd;
-
-	cmd = get_next_cmd(redir);
-	if (access(redir->file, F_OK) == 0 && access(redir->file, W_OK))
-		cmd->cmd.fd_out = -1;
-	else
+	if (cmd.fd_in < 0 || cmd.fd_out < 0)
 	{
-		cmd->cmd.fd_out = open(redir->file, O_TRUNC | O_WRONLY | O_CREAT, 0644);
-		cmd->file = redir->file;
+		close_redirs(cmd);
+		return (FAILURE);
 	}
-	if (cmd->cmd.fd_out < 0)
-		perror(redir->file);
-	return (exec_ast(redir->children[0], paths, envp));
-}
-
-int	make_redir_append(t_ast *redir, char **paths, char **envp)
-{
-	t_ast	*cmd;
-
-	cmd = get_next_cmd(redir);
-	if (access(redir->file, F_OK) == 0 && access(redir->file, W_OK))
-		cmd->cmd.fd_out = -1;
-	else
-	{
-		cmd->cmd.fd_out = open(redir->file, O_APPEND | O_WRONLY | O_CREAT, 0644);
-		cmd->file = redir->file;
-	}
-	if (cmd->cmd.fd_out < 0)
-		perror(redir->file);
-	return (exec_ast(redir->children[0], paths, envp));
-}
-*/
-
-void	reset_std_fds(void)
-{
-	if (dup2(0, STDIN_FILENO) == -1)
-	{
-		perror("dup2:stdin");
-//		exit(1);
-	}
-	if (dup2(1, STDOUT_FILENO) == -1)
-	{
-		perror("dup2:stdout");
-//		exit(1);
-	}
+	return (SUCCESS);
 }
 
 void	make_redir_in(t_ast *redir, t_cmd *cmd)
@@ -113,7 +60,7 @@ void	make_redir_append(t_ast *redir, t_cmd *cmd)
 		perror(redir->file);
 }
 
-void	make_redirs(t_ast *ast, t_cmd *cmd)
+int	make_redirs(t_ast *ast, t_cmd *cmd)
 {
 	int	i;
 
@@ -130,4 +77,5 @@ void	make_redirs(t_ast *ast, t_cmd *cmd)
 				make_redir_append(ast->children[i], cmd);
 		}
 	}
+	return (check_redirs(*cmd));
 }

@@ -12,44 +12,25 @@
 
 #include "../../incl/minishell.h"
 
-void	close_redirs(t_ast *ast, t_cmd cmd)
+void	dup_fds(t_cmd cmd)
 {
-	int	type;
-	int	i;
-
-	i = -1;
-	if (ast->children)
+	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in >= 0)
 	{
-		while (ast->children[++i])
-		{
-			type = ast->children[i]->type;
-			if (type == NODE_REDIR_IN)
-				close(cmd.fd_in);
-			else if (type == NODE_REDIR_OUT || type == NODE_REDIR_APPEND)
-				close(cmd.fd_out);
-		}
-	}
-}
-
-void	dup_fds(t_cmd *cmd)
-{
-	if (cmd->fd_in != STDIN_FILENO && cmd->fd_in >= 0)
-	{
-		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		if (dup2(cmd.fd_in, STDIN_FILENO) == -1)
 		{
 			perror("dup2: fd_in");
 			exit(1);
 		}
-		close(cmd->fd_in);
+		close(cmd.fd_in);
 	}
-	if (cmd->fd_out != STDOUT_FILENO && cmd->fd_out >= 0)
+	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out >= 0)
 	{
-		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		if (dup2(cmd.fd_out, STDOUT_FILENO) == -1)
 		{
 			perror("dup2: fd_out");
 			exit(1);
 		}
-		close(cmd->fd_out);
+		close(cmd.fd_out);
 	}
 }
 
@@ -70,7 +51,7 @@ int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 		if (pids[i] == 0)
 		{
 			make_redirs(children[i], &children[i]->cmd);
-			dup_fds(&children[i]->cmd);
+			dup_fds(children[i]->cmd);
 			exec_cmd(children[i]->cmd, paths, envp);	// will need to be modified for and/or nodes inside pipes
 		}
 		close_pipes(fd, i, count);

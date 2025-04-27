@@ -41,7 +41,7 @@ EXEC_FILES = exec.c \
 			 exec_pipe.c \
 			 get_path.c \
 			 pipe_utils.c \
-			 redir.c
+			 redirs.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = print.c
 

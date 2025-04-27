@@ -12,37 +12,6 @@
 
 #include "../../incl/minishell.h"
 
-// close function only used outside of pipes
-void	close_fds2(t_cmd cmd)
-{
-	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in >= 0)
-		close(cmd.fd_in);
-	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out >= 0)
-		close(cmd.fd_out);
-}
-
-// only used outside of pipes
-void	dup_fds2(t_cmd cmd)
-{
-	if (cmd.fd_in != STDIN_FILENO)
-	{
-		if (dup2(cmd.fd_in, STDIN_FILENO) == -1)
-		{
-			perror("dup2: fd_in");
-			exit(1);
-		}
-	}
-	if (cmd.fd_out != STDOUT_FILENO)
-	{
-		if (dup2(cmd.fd_out, STDOUT_FILENO) == -1)
-		{
-			perror("dup2: fd_out");
-			exit(1);
-		}
-	}
-	close_fds2(cmd);
-}
-
 void	exec_cmd(t_cmd cmd, char **paths, char **envp)
 {
 	get_cmd_path(&cmd, paths);
@@ -59,7 +28,6 @@ void	exec_cmd(t_cmd cmd, char **paths, char **envp)
 	}
 }
 
-// only called for a single function outside pipelines
 int	run_cmd(t_ast *ast, char **paths, char **envp)
 {
 	t_cmd	cmd;
@@ -68,12 +36,6 @@ int	run_cmd(t_ast *ast, char **paths, char **envp)
 
 	cmd = ast->cmd;
 	status = -1;
-	make_redirs(ast, &cmd);
-	if (cmd.fd_in < 0 || cmd.fd_out < 0)
-	{
-		close_fds2(cmd);
-		return (FAILURE);
-	}
 	pid = fork();
 	if (pid < 0)
 	{
@@ -81,10 +43,12 @@ int	run_cmd(t_ast *ast, char **paths, char **envp)
 		return (FAILURE); }
 	if (pid == 0)
 	{
-		dup_fds2(cmd);
+		if (make_redirs(ast, &cmd) == FAILURE)
+			return (FAILURE);
+		dup_fds(cmd);
 		exec_cmd(cmd, paths, envp);
 	}
-	close_fds2(cmd);
+	close_redirs(cmd);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
