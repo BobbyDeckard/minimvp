@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/25 13:26:01 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:07:06 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,20 @@ char **make_args(int count, ...) {
 
     va_end(args);
     return argv;
+}
+
+void	set_root_node(t_ast *ast, t_ast *root)
+{
+	int	i;
+
+
+	ast->root = root;
+	if (ast->children)
+	{
+		i = -1;
+		while (ast->children[++i])
+			set_root_node(ast->children[i], root);
+	}
 }
 
 t_ast	*make_simple_pipe(void)
@@ -57,6 +71,7 @@ t_ast	*make_simple_pipe(void)
 	if (!pipe)
 		exit(1);
 	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
 	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
 	if (!pipe->children)
 		exit(1);
@@ -65,6 +80,8 @@ t_ast	*make_simple_pipe(void)
 	pipe->children[2] = NULL;
 	pipe->file = NULL;
 	
+	set_root_node(pipe, pipe);
+
 	return (pipe);
 }
 
@@ -121,6 +138,7 @@ t_ast	*make_multi_pipe(void)
 	if (!pipe)
 		exit(1);
 	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
 	pipe->children = (t_ast **) malloc(5 * sizeof(t_ast *));
 	if (!pipe->children)
 		exit(1);
@@ -131,6 +149,8 @@ t_ast	*make_multi_pipe(void)
 	pipe->children[4] = NULL;
 	pipe->file = NULL;
 	
+	set_root_node(pipe, pipe);
+
 	return (pipe);
 }
 
@@ -143,6 +163,7 @@ t_ast	*make_double_redirs(void)
 	if (!redir_in)
 		exit(1);
 	redir_in->type = NODE_REDIR_IN;
+	redir_in->cmd.args = NULL;
 	redir_in->children = NULL;
 	redir_in->file = "file";
 
@@ -151,6 +172,7 @@ t_ast	*make_double_redirs(void)
 	if (!redir_out)
 		exit(1);
 	redir_out->type = NODE_REDIR_OUT;
+	redir_out->cmd.args = NULL;
 	redir_out->children = NULL;
 	redir_out->file = "outfile";
 
@@ -170,6 +192,8 @@ t_ast	*make_double_redirs(void)
 	cmd->children[2] = NULL;
 	cmd->file = NULL;
 
+	set_root_node(cmd, cmd);
+
 	return (cmd);
 }
 
@@ -182,6 +206,7 @@ t_ast	*make_double_redirs_simple_pipe(void)
 	if (!redir_in)
 		exit(1);
 	redir_in->type = NODE_REDIR_IN;
+	redir_in->cmd.args = NULL;
 	redir_in->children = NULL;
 	redir_in->file = "file";
 
@@ -190,6 +215,7 @@ t_ast	*make_double_redirs_simple_pipe(void)
 	if (!redir_out)
 		exit(1);
 	redir_out->type = NODE_REDIR_OUT;
+	redir_out->cmd.args = NULL;
 	redir_out->children = NULL;
 	redir_out->file = "outfile";
 
@@ -228,6 +254,7 @@ t_ast	*make_double_redirs_simple_pipe(void)
 	if (!pipe)
 		exit(1);
 	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
 	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
 	if (!pipe->children)
 		exit(1);
@@ -236,6 +263,8 @@ t_ast	*make_double_redirs_simple_pipe(void)
 	pipe->children[2] = NULL;
 	pipe->file = NULL;
 	
+	set_root_node(pipe, pipe);
+
 	return (pipe);
 }
 
@@ -248,6 +277,7 @@ t_ast	*make_double_redirs_multi_pipe(void)
 	if (!redir_in)
 		exit(1);
 	redir_in->type = NODE_REDIR_IN;
+	redir_in->cmd.args = NULL;
 	redir_in->children = NULL;
 	redir_in->file = "file";
 
@@ -256,6 +286,7 @@ t_ast	*make_double_redirs_multi_pipe(void)
 	if (!redir_out)
 		exit(1);
 	redir_out->type = NODE_REDIR_OUT;
+	redir_out->cmd.args = NULL;
 	redir_out->children = NULL;
 	redir_out->file = "outfile";
 
@@ -316,6 +347,7 @@ t_ast	*make_double_redirs_multi_pipe(void)
 	if (!pipe)
 		exit(1);
 	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
 	pipe->children = (t_ast **) malloc(5 * sizeof(t_ast *));
 	if (!pipe->children)
 		exit(1);
@@ -325,6 +357,8 @@ t_ast	*make_double_redirs_multi_pipe(void)
 	pipe->children[3] = cmd4;
 	pipe->children[4] = NULL;
 	pipe->file = NULL;
+
+	set_root_node(pipe, pipe);
 	
 	return (pipe);
 }

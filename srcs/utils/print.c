@@ -6,11 +6,26 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:35:00 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/04 15:52:02 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:46:18 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
+
+void	print_cmd(int mode)
+{
+	if (mode == 0)
+		printf("cat file | grep foo\n");
+	else if (mode == 1)
+		printf("cat file | grep foo | grep bar | wc -l\n");
+	else if (mode == 2)
+		printf("< file wc -l > outfile\n");
+	else if (mode == 3)
+		printf("< file grep foo | wc -l > outfile\n");
+	else if (mode == 4)
+		printf("< file grep foo | grep bar | grep foobar | wc -l > outfile\n");
+	printf("\n");
+}
 
 void	print_node_type(t_ast node)
 {
@@ -48,10 +63,10 @@ void	print_node_info(t_ast node)
 	int	i;
 
 	print_node_type(node);
-	if (node.parent)
+	if (node.root)
 	{
-		printf("Parent: ");
-		print_node_type(*node.parent);
+		printf("Root: ");
+		print_node_type(*node.root);
 	}
 	if (node.cmd.path)
 		printf("Path:\n\t%s\n", node.cmd.path);

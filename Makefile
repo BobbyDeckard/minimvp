@@ -43,7 +43,8 @@ EXEC_FILES = exec.c \
 			 pipe_utils.c \
 			 redirs.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
-UTILS_FILES = print.c
+UTILS_FILES = cleanup.c \
+			  print.c
 
 # INCLUDES
 HEADERS = incl/minishell.h

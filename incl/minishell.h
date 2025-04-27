@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 17:45:23 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:07:18 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,11 @@ typedef struct s_cmd
 typedef struct s_ast
 {
 	t_node_type		type;
-	struct s_ast	*parent;
+	struct s_ast	*root;
 	struct s_ast	**children;
 	t_cmd			cmd;
+	char			**paths;
+	char			**envp;
 	char			*file;
 }	t_ast;
 
@@ -69,16 +71,19 @@ char	**get_paths(void);
 
 /* Execution functions */
 void	close_redirs(t_cmd cmd);
-void	dup_fds(t_cmd cmd);
-void	exec_cmd(t_cmd cmd, char **paths, char **envp);
+void	dup_fds(t_ast ast);
+void	exec_cmd(t_ast *ast, t_cmd cmd);
 void	get_cmd_path(t_cmd *cmd, char **paths);
 void	reset_std_fds(void);
 int		check_redirs(t_cmd cmd);
-int		exec_ast(t_ast *ast, char **paths, char **envp);
-int		exec_pipe(t_ast **children, char **paths, char **envp);
+int		exec_ast(t_ast *ast);
+int		exec_pipe(t_ast **children);
+int		fork_error(t_ast *ast);
 int		make_redirs(t_ast *ast, t_cmd *cmd);
 
 /* Utilities functions */
+void	cleanup(t_ast *ast);
+void	print_cmd(int mode);
 void	print_tree(t_ast ast);
 char	*make_cwd(void);
 

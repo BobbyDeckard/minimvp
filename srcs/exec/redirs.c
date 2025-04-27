@@ -1,34 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir.c                                            :+:      :+:    :+:   */
+/*   redirs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:54:50 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/25 14:03:51 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 19:08:10 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
-
-void	close_redirs(t_cmd cmd)
-{
-	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in >= 0)
-		close(cmd.fd_in);
-	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out >= 0)
-		close(cmd.fd_out);
-}
-
-int	check_redirs(t_cmd cmd)
-{
-	if (cmd.fd_in < 0 || cmd.fd_out < 0)
-	{
-		close_redirs(cmd);
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
 
 void	make_redir_in(t_ast *redir, t_cmd *cmd)
 {

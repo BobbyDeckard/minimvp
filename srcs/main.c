@@ -6,28 +6,12 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:47:16 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/25 13:17:35 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:52:47 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/minishell.h"
 
-void	print_cmd(int mode)
-{
-	if (mode == 0)
-		printf("cat file | grep foo\n");
-	else if (mode == 1)
-		printf("cat file | grep foo | grep bar | wc -l\n");
-	else if (mode == 2)
-		printf("< file wc -l > outfile\n");
-	else if (mode == 3)
-		printf("< file grep foo | wc -l > outfile\n");
-	else if (mode == 4)
-		printf("< file grep foo | grep bar | grep foobar | wc -l > outfile\n");
-	printf("\n");
-}
-
-// La gestion des erreurs n'a pas encore été implémentée
 int main(int ac, char **av, char **envp)
 {
 	t_ast	*ast;
@@ -42,11 +26,17 @@ int main(int ac, char **av, char **envp)
 	print_cmd(mode);
 	paths = get_paths();
 	ast = make_ast(mode);
+	ast->paths = paths;
+	ast->envp = envp;
 //	print_tree(*ast);
-	exec_ast(ast, paths, envp);
+	exec_ast(ast);
+	cleanup(ast);
 	return (0);
 }
 
+// Fonction main appelant des fonctions chatgptisées pour simuler
+// un parsing.
+// Notre programme aura sans doute un main suivant cette forme générale.
 /*
 t_ast	*make_ast_from_input(const char *input);
 
