@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 17:22:31 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:45:23 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,15 @@ char	**ft_split_path(const char *s, char c);
 char	**get_paths(void);
 
 /* Execution functions */
+void	close_redirs(t_cmd cmd);
+void	dup_fds(t_cmd cmd);
 void	exec_cmd(t_cmd cmd, char **paths, char **envp);
 void	get_cmd_path(t_cmd *cmd, char **paths);
-void	make_redirs(t_ast *ast, t_cmd *cmd);
 void	reset_std_fds(void);
+int		check_redirs(t_cmd cmd);
 int		exec_ast(t_ast *ast, char **paths, char **envp);
 int		exec_pipe(t_ast **children, char **paths, char **envp);
-//int		make_redir_append(t_ast *redir, char **paths, char **envp);
-//int		make_redir_in(t_ast *redir, char **paths, char **envp);
-//int		make_redir_out(t_ast *redir, char **paths, char **envp);
+int		make_redirs(t_ast *ast, t_cmd *cmd);
 
 /* Utilities functions */
 void	print_tree(t_ast ast);
