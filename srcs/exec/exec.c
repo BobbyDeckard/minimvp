@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 15:11:28 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:47:25 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,21 @@ void	close_fds2(t_cmd cmd)
 void	dup_fds2(t_cmd cmd)
 {
 	if (cmd.fd_in != STDIN_FILENO)
-		dup2(cmd.fd_in, STDIN_FILENO);
+	{
+		if (dup2(cmd.fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2: fd_in");
+			exit(1);
+		}
+	}
 	if (cmd.fd_out != STDOUT_FILENO)
-		dup2(cmd.fd_out, STDOUT_FILENO);
+	{
+		if (dup2(cmd.fd_out, STDOUT_FILENO) == -1)
+		{
+			perror("dup2: fd_out");
+			exit(1);
+		}
+	}
 	close_fds2(cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/15 10:23:30 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:22:31 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_ast
 }	t_ast;
 
 /* Pseudo parsing functions */
-t_ast	*make_ast();
+t_ast	*make_ast(int  mode);
 char	**ft_split_path(const char *s, char c);
 char	**get_paths(void);
 
@@ -71,6 +71,7 @@ char	**get_paths(void);
 void	exec_cmd(t_cmd cmd, char **paths, char **envp);
 void	get_cmd_path(t_cmd *cmd, char **paths);
 void	make_redirs(t_ast *ast, t_cmd *cmd);
+void	reset_std_fds(void);
 int		exec_ast(t_ast *ast, char **paths, char **envp);
 int		exec_pipe(t_ast **children, char **paths, char **envp);
 //int		make_redir_append(t_ast *redir, char **paths, char **envp);

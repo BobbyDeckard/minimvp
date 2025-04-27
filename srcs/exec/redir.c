@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:54:50 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/10 10:43:53 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:03:51 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,20 @@ int	make_redir_append(t_ast *redir, char **paths, char **envp)
 	return (exec_ast(redir->children[0], paths, envp));
 }
 */
+
+void	reset_std_fds(void)
+{
+	if (dup2(0, STDIN_FILENO) == -1)
+	{
+		perror("dup2:stdin");
+//		exit(1);
+	}
+	if (dup2(1, STDOUT_FILENO) == -1)
+	{
+		perror("dup2:stdout");
+//		exit(1);
+	}
+}
 
 void	make_redir_in(t_ast *redir, t_cmd *cmd)
 {

@@ -35,7 +35,7 @@ OBJS = $(patsubst $(PATH_SRCS)%.c, $(PATH_OBJS)%.o, $(SRCS))
 # SOURCE FILES
 PSEUDO = $(addprefix pseudo_parsing/, $(PSEUDO_FILES))
 PSEUDO_FILES = ft_split_path.c \
-			   pseudo_parse.c
+			   presets.c
 EXEC = $(addprefix exec/, $(EXEC_FILES))
 EXEC_FILES = exec.c \
 			 exec_pipe.c \
