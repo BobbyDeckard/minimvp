@@ -42,7 +42,7 @@ void	link_pipe(t_ast *cmd1, t_ast *cmd2, int fd[2][2], int i)
 	cmd2->cmd.fd_in = fd[i % 2][0];
 }
 
-int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
+int	run_pipe(t_ast **children, int *pids, int count)
 {
 	int	fd[2][2];
 	int	i;
@@ -72,17 +72,13 @@ int	run_pipe(t_ast **children, char **paths, char **envp, int *pids, int count)
 
 int	exec_pipe(t_ast **children)
 {
-	char	**paths;
-	char	**envp;
 	int		*pids;
 	int		status;
 	int		count;
 
-	paths = (*children)->root->paths;
-	envp = (*children)->root->envp;
 	count = count_commands(children);
 	pids = (int *) malloc(count * sizeof(int));
-	status = run_pipe(children, paths, envp, pids, count);
+	status = run_pipe(children, pids, count);
 	free(pids);
 	return (status);
 }

@@ -39,9 +39,11 @@ PSEUDO_FILES = ft_split_path.c \
 EXEC = $(addprefix exec/, $(EXEC_FILES))
 EXEC_FILES = exec.c \
 			 exec_pipe.c \
+			 exec_utils.c \
 			 get_path.c \
 			 pipe_utils.c \
-			 redirs.c
+			 redirs.c \
+			 redirs_utils.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = cleanup.c \
 			  print.c

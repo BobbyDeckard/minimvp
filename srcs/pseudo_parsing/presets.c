@@ -363,18 +363,182 @@ t_ast	*make_double_redirs_multi_pipe(void)
 	return (pipe);
 }
 
+t_ast	*make_and_if(void)
+{
+	// cat file && echo ok
+
+	t_ast	*cmd1;
+	cmd1 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd1)
+		exit(1);
+	cmd1->type = NODE_CMD;
+	cmd1->cmd.args = make_args(2, "cat", "file");
+	cmd1->cmd.fd_in = STDIN_FILENO;
+	cmd1->cmd.fd_out = STDOUT_FILENO;
+	cmd1->children = NULL;
+	cmd1->file = NULL;
+
+	t_ast	*cmd2;
+	cmd2 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd2)
+		exit(1);
+	cmd2->type = NODE_CMD;
+	cmd2->cmd.args = make_args(2, "echo", "ok");
+	cmd2->cmd.fd_in = STDIN_FILENO;
+	cmd2->cmd.fd_out = STDOUT_FILENO;
+	cmd2->children = NULL;
+	cmd2->file = NULL;
+
+	t_ast	*and;
+	and = (t_ast *) malloc(sizeof(t_ast));
+	if (!and)
+		exit(1);
+	and->type = NODE_AND_IF;
+	and->cmd.args = NULL;
+	and->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!and->children)
+		exit(1);
+	and->children[0] = cmd1;
+	and->children[1] = cmd2;
+	and->children[2] = NULL;
+	and->file = NULL;
+	
+	set_root_node(and, and);
+
+	return (and);
+}
+
+t_ast	*make_or_if(void)
+{
+	// cat file || echo fail
+
+	t_ast	*cmd1;
+	cmd1 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd1)
+		exit(1);
+	cmd1->type = NODE_CMD;
+	cmd1->cmd.args = make_args(2, "cat", "file");
+	cmd1->cmd.fd_in = STDIN_FILENO;
+	cmd1->cmd.fd_out = STDOUT_FILENO;
+	cmd1->children = NULL;
+	cmd1->file = NULL;
+
+	t_ast	*cmd2;
+	cmd2 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd2)
+		exit(1);
+	cmd2->type = NODE_CMD;
+	cmd2->cmd.args = make_args(2, "echo", "fail");
+	cmd2->cmd.fd_in = STDIN_FILENO;
+	cmd2->cmd.fd_out = STDOUT_FILENO;
+	cmd2->children = NULL;
+	cmd2->file = NULL;
+
+	t_ast	*or;
+	or = (t_ast *) malloc(sizeof(t_ast));
+	if (!or)
+		exit(1);
+	or->type = NODE_OR_IF;
+	or->cmd.args = NULL;
+	or->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!or->children)
+		exit(1);
+	or->children[0] = cmd1;
+	or->children[1] = cmd2;
+	or->children[2] = NULL;
+	or->file = NULL;
+	
+	set_root_node(or, or);
+
+	return (or);
+}
+
+t_ast	*make_and_or_if(void)
+{
+	t_ast	*cmd1;
+	cmd1 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd1)
+		exit(1);
+	cmd1->type = NODE_CMD;
+	cmd1->cmd.args = make_args(2, "cat", "file");
+	cmd1->cmd.fd_in = STDIN_FILENO;
+	cmd1->cmd.fd_out = STDOUT_FILENO;
+	cmd1->children = NULL;
+	cmd1->file = NULL;
+
+	t_ast	*cmd2;
+	cmd2 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd2)
+		exit(1);
+	cmd2->type = NODE_CMD;
+	cmd2->cmd.args = make_args(2, "echo", "ok");
+	cmd2->cmd.fd_in = STDIN_FILENO;
+	cmd2->cmd.fd_out = STDOUT_FILENO;
+	cmd2->children = NULL;
+	cmd2->file = NULL;
+
+	t_ast	*cmd3;
+	cmd3 = (t_ast *) malloc(sizeof(t_ast));
+	if (!cmd3)
+		exit(1);
+	cmd3->type = NODE_CMD;
+	cmd3->cmd.args = make_args(2, "echo", "fail");
+	cmd3->cmd.fd_in = STDIN_FILENO;
+	cmd3->cmd.fd_out = STDOUT_FILENO;
+	cmd3->children = NULL;
+	cmd3->file = NULL;
+
+	t_ast	*and;
+	and = (t_ast *) malloc(sizeof(t_ast));
+	if (!and)
+		exit(1);
+	and->type = NODE_AND_IF;
+	and->cmd.args = NULL;
+	and->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!and->children)
+		exit(1);
+	and->children[0] = cmd1;
+	and->children[1] = cmd2;
+	and->children[2] = NULL;
+	and->file = NULL;
+	
+	t_ast	*or;
+	or = (t_ast *) malloc(sizeof(t_ast));
+	if (!or)
+		exit(1);
+	or->type = NODE_OR_IF;
+	or->cmd.args = NULL;
+	or->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!or->children)
+		exit(1);
+	or->children[0] = and;
+	or->children[1] = cmd3;
+	or->children[2] = NULL;
+	or->file = NULL;
+	
+	set_root_node(or, or);
+
+	return (or);
+}
+
 t_ast	*make_ast(int mode)
 {
 	if (mode == 0)
 		return (make_simple_pipe());
-	if (mode == 1)
+	else if (mode == 1)
 		return (make_multi_pipe());
-	if (mode == 2)
+	else if (mode == 2)
 		return (make_double_redirs());
-	if (mode == 3)
+	else if (mode == 3)
 		return (make_double_redirs_simple_pipe());
-	if (mode == 4)
+	else if (mode == 4)
 		return (make_double_redirs_multi_pipe());
+	else if (mode == 5)
+		return (make_and_if());
+	else if (mode == 6)
+		return (make_or_if());
+	else if (mode == 7)
+		return (make_and_or_if());
 	else
 		return (NULL);
 }
