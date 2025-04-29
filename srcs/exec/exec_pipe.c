@@ -33,11 +33,11 @@ int	run_pipe(t_ast **children, int *pids, int count)
 		{
 			if (children[i]->type == NODE_CMD)
 			{
-				make_redirs(children[i], &children[i]->cmd);
+				if (make_redirs(children[i], &children[i]->cmd) == FAILURE)
+					clean_exit(children[i]->root, FAILURE);
 				dup_fds(*children[i]);
 				exec_cmd(children[i], children[i]->cmd);
-				cleanup(children[i]->root);
-				exit(FAILURE);
+				clean_exit(children[i]->root, FAILURE);
 			}
 			exec_ast(children[i]);
 		}

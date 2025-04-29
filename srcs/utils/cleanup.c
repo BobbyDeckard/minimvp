@@ -42,8 +42,14 @@ void	clean_ast(t_ast *ast)
 	free(ast);
 }
 
-void	cleanup(t_ast *ast)
+void	cleanup(t_ast *root)
 {
-	clean_paths(ast->root->paths);
-	clean_ast(ast);
+	clean_paths(root->paths);
+	clean_ast(root);
+}
+
+void	clean_exit(t_ast *root, int status)
+{
+	cleanup(root);
+	exit(status);
 }

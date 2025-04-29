@@ -82,6 +82,7 @@ int		fork_error(t_ast *ast);
 int		make_redirs(t_ast *ast, t_cmd *cmd);
 
 /* Utilities functions */
+void	clean_exit(t_ast *root, int status);
 void	cleanup(t_ast *ast);
 void	print_cmd(int mode);
 void	print_tree(t_ast ast);
