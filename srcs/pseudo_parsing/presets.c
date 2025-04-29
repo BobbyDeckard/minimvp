@@ -525,6 +525,8 @@ t_ast	*make_and_or_if(void)
 
 t_ast	*make_demo(void)
 {
+	// < infile grep foo | wc -l > outfile && echo ok || echo fail
+
 	t_ast	*redir_in;
 	redir_in = (t_ast *) malloc(sizeof(t_ast));
 	if (!redir_in)

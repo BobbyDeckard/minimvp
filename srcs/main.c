@@ -21,7 +21,7 @@ int main(int ac, char **av, char **envp)
 	if (ac != 2)
 		return (1);
 	mode = ft_atoi(av[1]);
-	if (mode > 7)
+	if (mode > 8)
 		return (1);
 	print_cmd(mode);
 	paths = get_paths();
