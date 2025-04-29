@@ -28,7 +28,7 @@ int main(int ac, char **av, char **envp)
 	ast = make_ast(mode);
 	ast->paths = paths;
 	ast->envp = envp;
-//	print_tree(*ast);
+//	print_tree(ast);
 	exec_ast(ast);
 	cleanup(ast);
 	return (0);

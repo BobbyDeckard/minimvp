@@ -85,7 +85,7 @@ void	clean_exit(t_ast *root, int status);
 void	cleanup(t_ast *ast);
 void	print_cmd(int mode);
 void	dup2_error(void);
-void	print_tree(t_ast ast);
+void	print_tree(t_ast *ast);
 char	*make_cwd(void);
 int		fork_error(void);
 

@@ -188,7 +188,7 @@ t_ast	*make_double_redirs(void)
 	if (!cmd->children)
 		exit(1);
 	cmd->children[0] = redir_in;
-	cmd->children[1] = redir_in;
+	cmd->children[1] = redir_out;
 	cmd->children[2] = NULL;
 	cmd->file = NULL;
 

@@ -67,48 +67,49 @@ void	print_child(t_ast node)
 		printf("%s\n", node.cmd.args[0]);
 }
 
-void	print_node_info(t_ast node)
+void	print_node_info(t_ast *node)
 {
 	int	i;
 
-	print_node_type(node);
-	if (node.root)
+	print_node_type(*node);
+	printf("Pointer address: %p\n", node);
+	if (node->root)
 	{
 		printf("Root: ");
-		print_node_type(*node.root);
+		print_node_type(*node->root);
 	}
-	if (node.cmd.path)
-		printf("Path:\n\t%s\n", node.cmd.path);
-	if (node.cmd.args)
+	if (node->cmd.path)
+		printf("Path:\n\t%s\n", node->cmd.path);
+	if (node->cmd.args)
 	{
 		printf("Arguments:\n");
 		i = -1;
-		while (node.cmd.args[++i])
-			printf("\t%s\n", node.cmd.args[i]);
+		while (node->cmd.args[++i])
+			printf("\t%s\n", node->cmd.args[i]);
 	}
-	if (node.type == NODE_CMD)
-		printf("fd_in = %d\nfd_out = %d\n", node.cmd.fd_in, node.cmd.fd_out);
-	if (node.file)
-		printf("File: %s\n", node.file);
-	if (node.children)
+	if (node->type == NODE_CMD)
+		printf("fd_in = %d\nfd_out = %d\n", node->cmd.fd_in, node->cmd.fd_out);
+	if (node->file)
+		printf("File: %s\n", node->file);
+	if (node->children)
 	{
 		printf("Children:\n");
 		i = -1;
-		while (node.children[++i])
-			print_child(*(node.children[i]));
+		while (node->children[++i])
+			print_child(*(node->children[i]));
 	}
 	printf("\n");
 }
 
-void	print_tree(t_ast ast)
+void	print_tree(t_ast *ast)
 {
 	int	i;
 
 	print_node_info(ast);
-	if (ast.children)
+	if (ast->children)
 	{
 		i = -1;
-		while (ast.children[++i])
-			print_tree(*ast.children[i]);
+		while (ast->children[++i])
+			print_tree(ast->children[i]);
 	}
 }
