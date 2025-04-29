@@ -35,7 +35,7 @@ int	run_cmd(t_ast *ast)
 	status = -1;
 	pid = fork();
 	if (pid < 0)
-		return (fork_error(ast));	//nopnopnop no need to clean up for one failed command right ?
+		return (fork_error());
 	if (pid == 0)
 	{
 		if (make_redirs(ast, &cmd) == FAILURE)

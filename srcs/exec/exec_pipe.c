@@ -12,6 +12,23 @@
 
 #include "../../incl/minishell.h"
 
+int	*init_pids(int count)
+{
+	int	*pids;
+	int	i;
+
+	pids = (int *) malloc(count * sizeof(int));
+	if (!pids)
+	{
+		perror("malloc");
+		return (NULL);
+	}
+	i = -1;
+	while (++i < count)
+		pids[i] = -1;
+	return (pids);
+}
+
 void	link_pipe(t_ast *cmd1, t_ast *cmd2, int fd[2][2], int i)
 {
 	cmd1->cmd.fd_out = fd[i % 2][1];
@@ -27,7 +44,12 @@ int	run_pipe(t_ast **children, int *pids, int count)
 	while (++i < count)
 	{
 		if (i + 1 < count && make_pipe(fd[i % 2]))
-			link_pipe(children[i], children[i + 1], fd, i);
+		{
+			if (make_pipe(fd[i % 2]))
+				link_pipe(children[i], children[i + 1], fd, i);
+			else
+				return (pipe_error(pids, fd, i, count));
+		}
 		pids[i] = make_fork();
 		if (pids[i] == 0)
 		{
@@ -40,6 +62,7 @@ int	run_pipe(t_ast **children, int *pids, int count)
 				clean_exit(children[i]->root, FAILURE);
 			}
 			exec_ast(children[i]);
+			clean_exit(children[i]->root, SUCCESS);
 		}
 		close_pipes(fd, i, count);
 	}
@@ -53,7 +76,9 @@ int	exec_pipe(t_ast **children)
 	int		count;
 
 	count = count_commands(children);
-	pids = (int *) malloc(count * sizeof(int));
+	pids = init_pids(count);
+	if (!pids)
+		return (FAILURE);
 	status = run_pipe(children, pids, count);
 	free(pids);
 	return (status);

@@ -78,21 +78,23 @@ void	reset_std_fds(void);
 int		check_redirs(t_cmd cmd);
 int		exec_ast(t_ast *ast);
 int		exec_pipe(t_ast **children);
-int		fork_error(t_ast *ast);
 int		make_redirs(t_ast *ast, t_cmd *cmd);
 
 /* Utilities functions */
 void	clean_exit(t_ast *root, int status);
 void	cleanup(t_ast *ast);
 void	print_cmd(int mode);
+void	dup2_error(void);
 void	print_tree(t_ast ast);
 char	*make_cwd(void);
+int		fork_error(void);
 
 /* Pipe functions */
 void	close_pipes(int fd[2][2], int i, int count);
 int		count_commands(t_ast **children);
 int		make_fork(void);
 int		make_pipe(int fd[2]);
+int	pipe_error(int *pids, int fd[2][2], int i, int count);
 int		waitpids(int *pids, int count);
 
 

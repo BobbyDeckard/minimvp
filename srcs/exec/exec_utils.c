@@ -17,28 +17,13 @@ void	dup_fds(t_ast node)
 	if (node.cmd.fd_in != STDIN_FILENO && node.cmd.fd_in >= 0)
 	{
 		if (dup2(node.cmd.fd_in, STDIN_FILENO) == -1)
-		{
-			perror("dup2: fd_in");
-			cleanup(node.root);
-			exit(FAILURE);
-		}
+			dup2_error();
 		close(node.cmd.fd_in);
 	}
 	if (node.cmd.fd_out != STDOUT_FILENO && node.cmd.fd_out >= 0)
 	{
 		if (dup2(node.cmd.fd_out, STDOUT_FILENO) == -1)
-		{
-			perror("dup2: fd_out");
-			cleanup(node.root);
-			exit(FAILURE);
-		}
+			dup2_error();
 		close(node.cmd.fd_out);
 	}
-}
-
-int	fork_error(t_ast *ast)
-{
-	perror("fork");
-	cleanup(ast->root);
-	return (FAILURE);
 }

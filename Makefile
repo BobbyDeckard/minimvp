@@ -46,6 +46,7 @@ EXEC_FILES = exec.c \
 			 redirs_utils.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = cleanup.c \
+			  errors.c \
 			  print.c
 
 # INCLUDES

@@ -18,10 +18,7 @@ int	make_fork(void)
 
 	pid = fork();
 	if (pid < 0)
-	{
-		perror("fork");
-		exit(1);
-	}
+		fork_error();
 	return (pid);
 }
 
@@ -30,20 +27,25 @@ int	make_pipe(int fd[2])
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		exit(1);
+		return (0);
 	}
 	return (1);
 }
 
 int	waitpids(int *pids, int cmd_count)
 {
-	int status;
+	int	status;
 	int	i;
 
 	status = -1;
 	i = -1;
 	while (++i < cmd_count)
-		waitpid(pids[i], &status, 0);
+	{
+		if (pids[i] < 0)
+			status = FAILURE;
+		else
+			waitpid(pids[i], &status, 0);
+	}
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
 	return (status);
