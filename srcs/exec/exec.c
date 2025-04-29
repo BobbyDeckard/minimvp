@@ -27,25 +27,24 @@ void	exec_cmd(t_ast *ast, t_cmd cmd)
 
 int	run_cmd(t_ast *ast)
 {
-	t_cmd	cmd;
 	int		status;
 	int		pid;
 
-	cmd = ast->cmd;
 	status = -1;
 	pid = fork();
 	if (pid < 0)
 		return (fork_error());
 	if (pid == 0)
 	{
-		if (make_redirs(ast, &cmd) == FAILURE)
+		if (make_redirs(ast, &ast->cmd) == FAILURE)
 			return (FAILURE);
+		printf("fd_in = %d\n", ast->cmd.fd_in);
 		dup_fds(*ast);
-		exec_cmd(ast, cmd);
+		exec_cmd(ast, ast->cmd);
 		cleanup(ast->root);
 		exit(FAILURE);
 	}
-	close_redirs(cmd);
+	close_redirs(ast->cmd);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);

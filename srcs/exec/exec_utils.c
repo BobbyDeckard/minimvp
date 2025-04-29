@@ -14,6 +14,7 @@
 
 void	dup_fds(t_ast node)
 {
+
 	if (node.cmd.fd_in != STDIN_FILENO && node.cmd.fd_in >= 0)
 	{
 		if (dup2(node.cmd.fd_in, STDIN_FILENO) == -1)

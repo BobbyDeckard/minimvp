@@ -1,7 +1,7 @@
-This is the test file
-It contains lines with foo
-And lines with bar
-Some even have foobar
-foo foo
+This is a test file
+foo foo foo
+bar bar bar
+foobar foobar
+bar foo
 bar bar
-foo bar foobar
+foo foo
