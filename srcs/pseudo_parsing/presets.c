@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
+#include <unistd.h>
 
 char **make_args(int count, ...) {
 	// DO NOT SUBMIT THIS FILE
@@ -29,7 +30,6 @@ char **make_args(int count, ...) {
 void	set_root_node(t_ast *ast, t_ast *root)
 {
 	int	i;
-
 
 	ast->root = root;
 	if (ast->children)
@@ -455,6 +455,8 @@ t_ast	*make_or_if(void)
 
 t_ast	*make_and_or_if(void)
 {
+	// cat file && echo ok || echo fail
+	
 	t_ast	*cmd1;
 	cmd1 = (t_ast *) malloc(sizeof(t_ast));
 	if (!cmd1)
@@ -521,6 +523,124 @@ t_ast	*make_and_or_if(void)
 	return (or);
 }
 
+t_ast	*make_demo(void)
+{
+	t_ast	*redir_in;
+	redir_in = (t_ast *) malloc(sizeof(t_ast));
+	if (!redir_in)
+		exit(1);
+	redir_in->type = NODE_REDIR_IN;
+	redir_in->cmd.args = NULL;
+	redir_in->children = NULL;
+	redir_in->file = "infile";
+	
+	t_ast	*redir_out;
+	redir_out = (t_ast *) malloc(sizeof(t_ast));
+	if (!redir_out)
+		exit(1);
+	redir_out->type = NODE_REDIR_OUT;
+	redir_out->cmd.args = NULL;
+	redir_out->children = NULL;
+	redir_out->file = "outfile";
+
+	t_ast	*grep;
+	grep = (t_ast *) malloc(sizeof(t_ast));
+	if (!grep)
+		exit(1);
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "foo");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!grep->children)
+		exit(1);
+	grep->children[0] = redir_in;
+	grep->children[1] = NULL;
+	grep->file = NULL;
+
+	t_ast	*wc;
+	wc = (t_ast *) malloc(sizeof(t_ast));
+	if (!wc)
+		exit(1);
+	wc->type = NODE_CMD;
+	wc->cmd.args = make_args(2, "wc", "-l");
+	wc->cmd.fd_in = STDIN_FILENO;
+	wc->cmd.fd_out = STDOUT_FILENO;
+	wc->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!wc->children)
+		exit(1);
+	wc->children[0] = redir_out;
+	wc->children[1] = NULL;
+	wc->file = NULL;
+
+	t_ast	*echo_ok;
+	echo_ok = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo_ok)
+		exit(1);
+	echo_ok->type = NODE_CMD;
+	echo_ok->cmd.args = make_args(2, "echo", "ok");
+	echo_ok->cmd.fd_in = STDIN_FILENO;
+	echo_ok->cmd.fd_out = STDOUT_FILENO;
+	echo_ok->children = NULL;
+	echo_ok->file = NULL;
+
+	t_ast	*echo_fail;
+	echo_fail = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo_fail)
+		exit(1);
+	echo_fail->type = NODE_CMD;
+	echo_fail->cmd.args = make_args(2, "echo", "fail");
+	echo_fail->cmd.fd_in = STDIN_FILENO;
+	echo_fail->cmd.fd_out = STDOUT_FILENO;
+	echo_fail->children = NULL;
+	echo_fail->file = NULL;
+
+	t_ast	*pipe;
+	pipe = (t_ast *) malloc(sizeof(t_ast));
+	if (!pipe)
+		exit(1);
+	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
+	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!pipe->children)
+		exit(1);
+	pipe->children[0] = grep;
+	pipe->children[1] = wc;
+	pipe->children[2] = NULL;
+
+	t_ast	*and;
+	and = (t_ast *) malloc(sizeof(t_ast));
+	if (!and)
+		exit(1);
+	and->type = NODE_AND_IF;
+	and->cmd.args = NULL;
+	and->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!and->children)
+		exit(1);
+	and->children[0] = pipe;
+	and->children[1] = echo_ok;
+	and->children[2] = NULL;
+	and->file = NULL;
+
+	t_ast	*or;
+	or = (t_ast *) malloc(sizeof(t_ast));
+	if (!or)
+		exit(1);
+	or->type = NODE_OR_IF;
+	or->cmd.args = NULL;
+	or->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!or->children)
+		exit(1);
+	or->children[0] = and;
+	or->children[1] = echo_fail;
+	or->children[2] = NULL;
+	or->file = NULL;
+
+	set_root_node(or, or);
+
+	return (or);
+}
+
 t_ast	*make_ast(int mode)
 {
 	if (mode == 0)
@@ -539,6 +659,8 @@ t_ast	*make_ast(int mode)
 		return (make_or_if());
 	else if (mode == 7)
 		return (make_and_or_if());
+	else if (mode == 8)
+		return (make_demo());
 	else
 		return (NULL);
 }

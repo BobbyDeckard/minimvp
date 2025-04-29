@@ -14,16 +14,23 @@
 
 void	print_cmd(int mode)
 {
+	printf("Emulating command:\n");
 	if (mode == 0)
-		printf("cat file | grep foo\n");
+		printf("\tcat file | grep foo\n");
 	else if (mode == 1)
-		printf("cat file | grep foo | grep bar | wc -l\n");
+		printf("\tcat file | grep foo | grep bar | wc -l\n");
 	else if (mode == 2)
-		printf("< file wc -l > outfile\n");
+		printf("\t< file wc -l > outfile\n");
 	else if (mode == 3)
-		printf("< file grep foo | wc -l > outfile\n");
+		printf("\t< file grep foo | wc -l > outfile\n");
 	else if (mode == 4)
-		printf("< file grep foo | grep bar | grep foobar | wc -l > outfile\n");
+		printf("\t< file grep foo | grep bar | grep foobar | wc -l > outfile\n");
+	else if (mode == 5)
+		printf("\tcat file && echo ok\n");
+	else if (mode == 6)
+		printf("\tcat file || echo fail\n");
+	else if (mode == 7)
+		printf("\tcat file && echo ok || echo fail\n");
 	printf("\n");
 }
 
