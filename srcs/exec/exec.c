@@ -38,7 +38,6 @@ int	run_cmd(t_ast *ast)
 	{
 		if (make_redirs(ast, &ast->cmd) == FAILURE)
 			return (FAILURE);
-		printf("fd_in = %d\n", ast->cmd.fd_in);
 		dup_fds(*ast);
 		exec_cmd(ast, ast->cmd);
 		cleanup(ast->root);

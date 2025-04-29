@@ -18,7 +18,6 @@ void	make_redir_in(t_ast *redir, t_cmd *cmd)
 		cmd->fd_in = -1;
 	else
 		cmd->fd_in = open(redir->file, O_RDONLY);
-	printf("%s: fd %d\n", redir->file, cmd->fd_in);
 	if (cmd->fd_in < 0)
 		perror(redir->file);
 }
