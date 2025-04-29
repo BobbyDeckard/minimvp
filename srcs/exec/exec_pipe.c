@@ -12,30 +12,6 @@
 
 #include "../../incl/minishell.h"
 
-void	dup_fds(t_ast node)
-{
-	if (node.cmd.fd_in != STDIN_FILENO && node.cmd.fd_in >= 0)
-	{
-		if (dup2(node.cmd.fd_in, STDIN_FILENO) == -1)
-		{
-			perror("dup2: fd_in");
-			cleanup(node.root);
-			exit(FAILURE);
-		}
-		close(node.cmd.fd_in);
-	}
-	if (node.cmd.fd_out != STDOUT_FILENO && node.cmd.fd_out >= 0)
-	{
-		if (dup2(node.cmd.fd_out, STDOUT_FILENO) == -1)
-		{
-			perror("dup2: fd_out");
-			cleanup(node.root);
-			exit(FAILURE);
-		}
-		close(node.cmd.fd_out);
-	}
-}
-
 void	link_pipe(t_ast *cmd1, t_ast *cmd2, int fd[2][2], int i)
 {
 	cmd1->cmd.fd_out = fd[i % 2][1];
