@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 13:28:31 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:13:00 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -954,6 +954,51 @@ t_ast	*make_echo_pipe(void)
 	return (pipe);
 }
 
+t_ast	*make_cd_pwd(void)
+{
+	// cd srcs && pwd
+
+	t_ast	*cd;
+	cd = (t_ast *) malloc(sizeof(t_ast));
+	if (!cd)
+		exit(1);
+	cd->type = NODE_CMD;
+	cd->cmd.args = make_args(2, "cd", "test");
+	cd->cmd.fd_in = STDIN_FILENO;
+	cd->cmd.fd_out = STDOUT_FILENO;
+	cd->children = NULL;
+	cd->file = NULL;
+
+	t_ast	*pwd;
+	pwd = (t_ast *) malloc(sizeof(t_ast));
+	if (!pwd)
+		exit(1);
+	pwd->type = NODE_CMD;
+	pwd->cmd.args = make_args(1, "pwd");
+	pwd->cmd.fd_in = STDIN_FILENO;
+	pwd->cmd.fd_out = STDOUT_FILENO;
+	pwd->children = NULL;
+	pwd->file = NULL;
+
+	t_ast	*and;
+	and = (t_ast *) malloc(sizeof(t_ast));
+	if (!and)
+		exit(1);
+	and->type = NODE_AND_IF;
+	and->cmd.args = NULL;
+	and->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!and->children)
+		exit(1);
+	and->children[0] = cd;
+	and->children[1] = pwd;
+	and->children[2] = NULL;
+	and->file = NULL;
+
+	set_root_node(and, and);
+	
+	return (and);
+}
+
 t_ast	*make_ast(int mode)
 {
 	if (mode == 0)
@@ -986,5 +1031,7 @@ t_ast	*make_ast(int mode)
 		return (make_echo_redir());
 	else if (mode == 14)
 		return (make_echo_pipe());
+	else if (mode == 15)
+		return (make_cd_pwd());
 	return (NULL);
 }

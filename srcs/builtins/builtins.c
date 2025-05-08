@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:37:06 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 12:45:52 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:52:47 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	exec_builtin(t_ast *cmd)
 	if (!ft_strncmp(name, "echo", 5))
 		return (echo(cmd));
 	else if (!ft_strncmp(name, "cd", 3))
-		return (1);
+		return (cd(cmd));
 	else if (!ft_strncmp(name, "pwd", 4))
 		return (1);
 	else if (!ft_strncmp(name, "export", 7))
@@ -47,15 +47,15 @@ int	is_builtin(t_cmd cmd)
 		return (1);
 	else if (!ft_strncmp(name, "cd", 3))
 		return (1);
-	else if (!ft_strncmp(name, "pwd", 4))
-		return (1);
-	else if (!ft_strncmp(name, "export", 7))
-		return (1);
-	else if (!ft_strncmp(name, "unset", 6))
-		return (1);
-	else if (!ft_strncmp(name, "env", 4))
-		return (1);
-	else if (!ft_strncmp(name, "exit", 5))
-		return (1);
+//	else if (!ft_strncmp(name, "pwd", 4))
+//		return (1);
+//	else if (!ft_strncmp(name, "export", 7))
+//		return (1);
+//	else if (!ft_strncmp(name, "unset", 6))
+//		return (1);
+//	else if (!ft_strncmp(name, "env", 4))
+//		return (1);
+//	else if (!ft_strncmp(name, "exit", 5))
+//		return (1);
 	return (0);
 }
