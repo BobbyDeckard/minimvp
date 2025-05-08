@@ -33,6 +33,12 @@ void	print_cmd(int mode)
 		printf("\tcat file && echo ok || echo fail\n");
 	else if (mode == 8)
 		printf("< infile grep foo | wc -l > outfile && echo ok || echo fail\n");
+	else if (mode == 9)
+		printf("cat file | (grep foo && grep bar)\n");
+	else if (mode == 10)
+		printf("cat file | (grep foo || grep bar)\n");
+	else if (mode == 11)
+		printf("cat file | (cat infile && grep foo)\n");
 	printf("\n");
 }
 

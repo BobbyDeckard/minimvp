@@ -73,6 +73,7 @@ char	**get_paths(void);
 void	close_redirs(t_cmd cmd);
 void	dup_fds(t_ast ast);
 void	exec_cmd(t_ast *ast, t_cmd cmd);
+void	exec_pipe_child(t_ast *child);
 void	get_cmd_path(t_cmd *cmd, char **paths);
 void	reset_std_fds(void);
 int		check_redirs(t_cmd cmd);

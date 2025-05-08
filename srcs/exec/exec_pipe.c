@@ -31,8 +31,88 @@ int	*init_pids(int count)
 
 void	link_pipe(t_ast *cmd1, t_ast *cmd2, int fd[2][2], int i)
 {
-	cmd1->cmd.fd_out = fd[i % 2][1];
-	cmd2->cmd.fd_in = fd[i % 2][0];
+	int	j;
+
+	if (cmd1->type == NODE_CMD)
+		cmd1->cmd.fd_out = fd[i % 2][1];
+	else
+	{
+		j = -1;
+		while (cmd1->children[++j])
+			cmd1->children[j]->cmd.fd_out = fd[i % 2][1];
+	}
+	if (cmd2->type == NODE_CMD)
+		cmd2->cmd.fd_in = fd[i % 2][0];
+	else
+	{
+		j = -1;
+		while (cmd2->children[++j])
+			cmd2->children[j]->cmd.fd_in = fd[i % 2][0];
+	}
+}
+
+void	exec_pipe_cmd(t_ast *cmd)
+{
+	if (make_redirs(cmd, &cmd->cmd) == FAILURE)
+		clean_exit(cmd->root, FAILURE);
+	dup_fds(*cmd);
+	exec_cmd(cmd, cmd->cmd);
+	clean_exit(cmd->root, FAILURE);
+}
+
+void	exec_pipe_and(t_ast *and)
+{
+	int	status;
+	int	pid;
+	int	i;
+
+	i = -1;
+	while (and->children[++i])
+	{
+		if (and->children[i]->type == NODE_CMD)
+		{
+			pid = make_fork();
+			if (pid == 0)
+				exec_pipe_cmd(and->children[i]);
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status))
+				status = WEXITSTATUS(status);
+			if (status != SUCCESS)
+				break;
+		}
+		else
+			exec_pipe_child(and->children[i]);
+	}
+}
+
+void	exec_pipe_or(t_ast *or)
+{
+	int	status;
+	int	pid;
+	int	i;
+
+	i = -1;
+	while (or->children[++i])
+	{
+		pid = make_fork();
+		if (pid == 0)
+			exec_pipe_child(or->children[i]);
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+		if (status == SUCCESS)
+			break;
+	}
+}
+
+void	exec_pipe_child(t_ast *child)
+{
+	if (child->type == NODE_CMD)
+		exec_pipe_cmd(child);
+	else if (child->type == NODE_AND_IF)
+		exec_pipe_and(child);
+	else if (child->type == NODE_OR_IF)
+		exec_pipe_or(child);
 }
 
 int	run_pipe(t_ast **children, int *pids, int count)
@@ -52,18 +132,7 @@ int	run_pipe(t_ast **children, int *pids, int count)
 		}
 		pids[i] = make_fork();
 		if (pids[i] == 0)
-		{
-			if (children[i]->type == NODE_CMD)
-			{
-				if (make_redirs(children[i], &children[i]->cmd) == FAILURE)
-					clean_exit(children[i]->root, FAILURE);
-				dup_fds(*children[i]);
-				exec_cmd(children[i], children[i]->cmd);
-				clean_exit(children[i]->root, FAILURE);
-			}
-			exec_ast(children[i]);
-			clean_exit(children[i]->root, SUCCESS);
-		}
+			exec_pipe_child(children[i]);
 		close_pipes(fd, i, count);
 	}
 	return (waitpids(pids, count));
