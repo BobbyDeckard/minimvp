@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:47:16 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 18:52:47 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:29:02 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ int main(int ac, char **av, char **envp)
 	if (ac != 2)
 		return (1);
 	mode = ft_atoi(av[1]);
-	if (mode > 11)
+	if (mode > 14)
+	{
+		printf("Invalid preset\n");
 		return (1);
+	}
 	print_cmd(mode);
 	paths = get_paths();
 	ast = make_ast(mode);

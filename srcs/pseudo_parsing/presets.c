@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 18:07:06 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:28:31 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -854,6 +854,106 @@ t_ast	*make_wtfisgoingon(void)
 
 }
 
+t_ast	*make_echo(void)
+{
+	// echo -n hello
+
+	t_ast	*echo;
+	echo = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo)
+		exit(1);
+	echo->type = NODE_CMD;
+	echo->cmd.args = make_args(3, "echo", "-n", "hello");
+	echo->cmd.fd_in = STDIN_FILENO;
+	echo->cmd.fd_out = STDOUT_FILENO;
+	echo->children = NULL;
+	echo->file = NULL;
+
+	set_root_node(echo, echo);
+
+	return (echo);
+}
+
+t_ast	*make_echo_redir(void)
+{
+	// echo hello there > outfile
+
+	t_ast	*redir_out;
+	redir_out = (t_ast *) malloc(sizeof(t_ast));
+	if (!redir_out)
+		exit(1);
+	redir_out->type = NODE_REDIR_OUT;
+	redir_out->cmd.args = NULL;
+	redir_out->children = NULL;
+	redir_out->file = "outfile";
+
+	t_ast	*echo;
+	echo = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo)
+		exit(1);
+	echo->type = NODE_CMD;
+	echo->cmd.args = make_args(3, "echo", "hello", "there");
+	echo->cmd.fd_in = STDIN_FILENO;
+	echo->cmd.fd_out = STDOUT_FILENO;
+	echo->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!echo->children)
+		exit(1);
+	echo->children[0] = redir_out;
+	echo->children[1] = NULL;
+	echo->file = NULL;
+
+	set_root_node(echo, echo);
+
+	return (echo);
+}
+
+t_ast	*make_echo_pipe(void)
+{
+	// echo hello there | wc -w
+
+	t_ast	*echo;
+	echo = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo)
+		exit(1);
+	echo->type = NODE_CMD;
+	echo->cmd.args = make_args(3, "echo", "hello", "there");
+	echo->cmd.fd_in = STDIN_FILENO;
+	echo->cmd.fd_out = STDOUT_FILENO;
+	echo->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!echo->children)
+		exit(1);
+	echo->children = NULL;
+	echo->file = NULL;
+
+	t_ast	*wc;
+	wc = (t_ast *) malloc(sizeof(t_ast));
+	if (!wc)
+		exit(1);
+	wc->type = NODE_CMD;
+	wc->cmd.args = make_args(2, "wc", "-w");
+	wc->cmd.fd_in = STDIN_FILENO;
+	wc->cmd.fd_out = STDOUT_FILENO;
+	wc->children = NULL;
+	wc->file = NULL;
+
+	t_ast	*pipe;
+	pipe = (t_ast *) malloc(sizeof(t_ast));
+	if (!pipe)
+		exit(1);
+	pipe->type = NODE_PIPE;
+	pipe->cmd.args = NULL;
+	pipe->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!pipe->children)
+		exit(1);
+	pipe->children[0] = echo;
+	pipe->children[1] = wc;
+	pipe->children[2] = NULL;
+
+	set_root_node(pipe, pipe);
+
+	return (pipe);
+}
+
 t_ast	*make_ast(int mode)
 {
 	if (mode == 0)
@@ -880,5 +980,11 @@ t_ast	*make_ast(int mode)
 		return (make_pipe_or_parentheses());
 	else if (mode == 11)
 		return (make_wtfisgoingon());
+	else if (mode == 12)
+		return (make_echo());
+	else if (mode == 13)
+		return (make_echo_redir());
+	else if (mode == 14)
+		return (make_echo_pipe());
 	return (NULL);
 }

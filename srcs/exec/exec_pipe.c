@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 19:04:27 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:22:06 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,13 @@ int	run_pipe(t_ast **children, int *pids, int count)
 			else
 				return (pipe_error(pids, fd, i, count));
 		}
-		pids[i] = make_fork();
+		if (children[i] == NODE_CMD && is_builtin(children[i]->cmd))
+		{
+			pids[i] = -1;
+			exec_builtin(children[i]);
+		}
+		else
+			pids[i] = make_fork();
 		if (pids[i] == 0)
 			exec_pipe_child(children[i]);
 		close_pipes(fd, i, count);
@@ -144,7 +150,7 @@ int	exec_pipe(t_ast **children)
 	int		status;
 	int		count;
 
-	count = count_commands(children);
+	count = count_nodes(children);
 	pids = init_pids(count);
 	if (!pids)
 		return (FAILURE);

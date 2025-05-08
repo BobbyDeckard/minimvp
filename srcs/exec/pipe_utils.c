@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:56:56 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/15 10:23:16 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:17:25 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	waitpids(int *pids, int cmd_count)
 	return (status);
 }
 
-int	count_commands(t_ast **children)
+int	count_nodes(t_ast **children)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 19:08:07 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:44:28 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	run_cmd(t_ast *ast)
 	int		pid;
 
 	status = -1;
+	if (is_builtin(ast->cmd))
+		return (exec_builtin(ast));
 	pid = fork();
 	if (pid < 0)
 		return (fork_error());

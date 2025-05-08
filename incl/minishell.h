@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 19:07:18 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:17:36 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,16 @@ int		fork_error(void);
 
 /* Pipe functions */
 void	close_pipes(int fd[2][2], int i, int count);
-int		count_commands(t_ast **children);
+int		count_nodes(t_ast **children);
 int		make_fork(void);
 int		make_pipe(int fd[2]);
 int	pipe_error(int *pids, int fd[2][2], int i, int count);
 int		waitpids(int *pids, int count);
 
+/* Builtins functions */
+int	echo(t_ast	*echo);
+int	exec_builtin(t_ast *cmd);
+int	is_builtin(t_cmd cmd);
 
 #include <string.h>
 

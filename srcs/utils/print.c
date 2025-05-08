@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:35:00 by imeulema          #+#    #+#             */
-/*   Updated: 2025/04/27 18:46:18 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:28:55 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	print_cmd(int mode)
 		printf("cat file | (grep foo || grep bar)\n");
 	else if (mode == 11)
 		printf("cat file | (cat infile && grep foo)\n");
+	else if (mode == 12)
+		printf("echo -n hello\n");
+	else if (mode == 13)
+		printf("echo hello there > outfile\n");
+	else if (mode == 14)
+		printf("echo hello there | wc -w\n");
 	printf("\n");
 }
 

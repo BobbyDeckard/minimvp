@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/04/10 11:54:46 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/08 12:59:11 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCS = $(addprefix $(PATH_SRCS), $(SRCS_FILES))
 SRCS_FILES = main.c \
 			 $(PSEUDO) \
 			 $(EXEC) \
-			 $(UTILS)
+			 $(UTILS) \
+			 $(BUILTINS)
 PATH_SRCS = srcs/
 PATH_OBJS = objs/
 OBJS = $(patsubst $(PATH_SRCS)%.c, $(PATH_OBJS)%.o, $(SRCS))
@@ -48,6 +49,9 @@ UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = cleanup.c \
 			  errors.c \
 			  print.c
+BUILTINS = $(addprefix builtins/, $(BLTIN_FILES))
+BLTIN_FILES = builtins.c \
+			  echo.c
 
 # INCLUDES
 HEADERS = incl/minishell.h
