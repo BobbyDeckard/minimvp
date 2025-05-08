@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:13:00 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:15:35 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -963,7 +963,7 @@ t_ast	*make_cd_pwd(void)
 	if (!cd)
 		exit(1);
 	cd->type = NODE_CMD;
-	cd->cmd.args = make_args(2, "cd", "test");
+	cd->cmd.args = make_args(2, "cd", "srcs");
 	cd->cmd.fd_in = STDIN_FILENO;
 	cd->cmd.fd_out = STDOUT_FILENO;
 	cd->children = NULL;
