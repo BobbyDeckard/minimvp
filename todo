@@ -1,0 +1,4 @@
+1. Make sure errors are handled properly.
+2. Implement heredoc.
+3. Implement builtins.
+4. Check and fix behaviour with combinations of pipe and logical operators.
