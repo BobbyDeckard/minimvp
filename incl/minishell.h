@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 13:48:43 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:25:02 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	cd(t_ast *cd);
 int	echo(t_ast	*echo);
 int	exec_builtin(t_ast *cmd);
 int	is_builtin(t_cmd cmd);
+int	pwd(void);
 
 #include <string.h>
 

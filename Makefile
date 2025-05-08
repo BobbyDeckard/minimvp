@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/08 13:48:07 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/08 17:24:07 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,8 @@ UTILS_FILES = cleanup.c \
 BUILTINS = $(addprefix builtins/, $(BLTIN_FILES))
 BLTIN_FILES = builtins.c \
 			  cd.c \
-			  echo.c
+			  echo.c \
+			  pwd.c
 
 # INCLUDES
 HEADERS = incl/minishell.h
