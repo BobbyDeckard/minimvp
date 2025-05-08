@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:37:06 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:25:10 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:29:05 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	exec_builtin(t_ast *cmd)
 	else if (!ft_strncmp(name, "cd", 3))
 		return (cd(cmd));
 	else if (!ft_strncmp(name, "pwd", 4))
-		return (pwd());
+		return (pwd(cmd));
 	else if (!ft_strncmp(name, "export", 7))
 		return (1);
 	else if (!ft_strncmp(name, "unset", 6))

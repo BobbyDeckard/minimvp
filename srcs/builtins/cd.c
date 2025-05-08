@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:34:18 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:14:13 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:28:19 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,16 @@ int	cd(t_ast *cd)
 {
 	char	*error;
 
+	if (make_redirs(cd, &cd->cmd) == FAILURE)
+		return (FAILURE);
 	if (chdir(cd->cmd.args[1]) < 0)
 	{
 		error = cd_error(cd);
 		perror(error);
 		free(error);
+		close_redirs(cd->cmd);
 		return (FAILURE);
 	}
+	close_redirs(cd->cmd);
 	return (SUCCESS);
 }
