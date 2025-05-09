@@ -42,6 +42,7 @@ void	clean_ast(t_ast *ast)
 	free(ast);
 }
 
+//	cleans up the pointers allocated for the AST and for the paths
 void	cleanup(t_ast *root)
 {
 	clean_paths(root->paths);
