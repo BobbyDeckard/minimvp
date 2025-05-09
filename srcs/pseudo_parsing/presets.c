@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:26:06 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:50:14 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -999,6 +999,26 @@ t_ast	*make_cd_pwd(void)
 	return (and);
 }
 
+t_ast	*make_env(void)
+{
+	// env
+
+	t_ast	*env;
+	env = (t_ast *) malloc(sizeof(t_ast));
+	if (!env)
+		exit(1);
+	env->type = NODE_CMD;
+	env->cmd.args = make_args(1, "env");
+	env->cmd.fd_in = STDIN_FILENO;
+	env->cmd.fd_out = STDOUT_FILENO;
+	env->children = NULL;
+	env->file = NULL;
+
+	set_root_node(env, env);
+
+	return (env);
+}
+
 t_ast	*make_ast(int mode)
 {
 	if (mode == 0)
@@ -1033,5 +1053,7 @@ t_ast	*make_ast(int mode)
 		return (make_echo_pipe());
 	else if (mode == 15)
 		return (make_cd_pwd());
+	else if (mode == 16)
+		return (make_env());
 	return (NULL);
 }

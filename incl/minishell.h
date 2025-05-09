@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:28:56 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:25:02 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	clean_exit(t_ast *root, int status);
 void	cleanup(t_ast *ast);
 void	print_cmd(int mode);
 void	dup2_error(void);
+void	malloc_error(t_ast *ast);
 void	print_tree(t_ast *ast);
 char	*make_cwd(void);
 int		fork_error(void);
@@ -101,6 +102,7 @@ int		waitpids(int *pids, int count);
 /* Builtins functions */
 int	cd(t_ast *cd);
 int	echo(t_ast	*echo);
+int	env(t_ast *env);
 int	exec_builtin(t_ast *cmd);
 int	is_builtin(t_cmd cmd);
 int	pwd(t_ast *pwd);

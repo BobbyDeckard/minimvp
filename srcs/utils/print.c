@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:35:00 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:09:32 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:50:30 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	print_cmd(int mode)
 		printf("echo hello there | wc -w\n");
 	else if (mode == 15)
 		printf("cd srcs && pwd\n");
+	else if (mode == 16)
+		printf("env\n");
 	printf("\n");
 }
 

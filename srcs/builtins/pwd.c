@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:16:33 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:30:12 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:41:48 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int	pwd(t_ast *pwd)
 		close_redirs(pwd->cmd);
 		return (FAILURE);
 	}
-	ft_putstr_fd(cwd, STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
+	ft_putstr_fd(cwd, pwd->cmd.fd_out);
+	ft_putchar_fd('\n', pwd->cmd.fd_out);
+	free(cwd);
 	close_redirs(pwd->cmd);
 	return (SUCCESS);
 }

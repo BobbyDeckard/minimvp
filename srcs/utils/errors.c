@@ -20,3 +20,9 @@ int	pipe_error(int *pids, int fd[2][2], int i, int count)
 	waitpids(pids, count);
 	return (FAILURE);
 }
+
+void	malloc_error(t_ast *ast)
+{
+	perror("malloc");
+	clean_exit(ast->root, FAILURE);
+}
