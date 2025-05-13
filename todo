@@ -3,3 +3,5 @@
 3. Implement builtins.
 4. Check redirs with parentheses
 5. Check redirs with cd ?
+6. Handle simple redirs without commands
+	-> need to keep reference to parent ?
