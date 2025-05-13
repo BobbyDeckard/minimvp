@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/13 16:14:40 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/13 19:42:01 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ EXEC = $(addprefix exec/, $(EXEC_FILES))
 EXEC_FILES = exec.c \
 			 exec_utils.c \
 			 get_path.c \
+			 heredoc.c \
 			 pipe.c \
 			 pipe_utils.c \
 			 pipe_utils2.c \

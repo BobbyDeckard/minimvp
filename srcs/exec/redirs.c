@@ -6,14 +6,17 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:54:50 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:56:36 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:29:58 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-void	make_redir_in(t_ast *node, t_cmd *cmd)
+void	make_redir_in(t_ast *node)
 {
+	t_cmd	*cmd;
+	
+	cmd = &node->cmd;
 	if (access(node->file, F_OK) != 0 || access(node->file, R_OK) != 0)
 		cmd->fd_in = -1;
 	else
@@ -22,8 +25,11 @@ void	make_redir_in(t_ast *node, t_cmd *cmd)
 		perror(node->file);
 }
 
-void	make_redir_out(t_ast *node, t_cmd *cmd)
+void	make_redir_out(t_ast *node)
 {
+	t_cmd	*cmd;
+	
+	cmd = &node->cmd;
 	if (access(node->file, F_OK) == 0 && access(node->file, W_OK) != 0)
 		cmd->fd_out = -1;
 	else
@@ -32,8 +38,11 @@ void	make_redir_out(t_ast *node, t_cmd *cmd)
 		perror(node->file);
 }
 
-void	make_redir_append(t_ast *node, t_cmd *cmd)
+void	make_redir_append(t_ast *node)
 {
+	t_cmd	*cmd;
+	
+	cmd = &node->cmd;
 	if (access(node->file, F_OK) == 0 && access(node->file, W_OK) != 0)
 		cmd->fd_out = -1;
 	else
@@ -42,7 +51,7 @@ void	make_redir_append(t_ast *node, t_cmd *cmd)
 		perror(node->file);
 }
 
-int	make_redirs(t_ast *node, t_cmd *cmd)
+int	make_redirs(t_ast *node)
 {
 	int	i;
 
@@ -52,12 +61,14 @@ int	make_redirs(t_ast *node, t_cmd *cmd)
 		while (node->children[++i])
 		{
 			if (node->children[i]->type == NODE_REDIR_IN)
-				make_redir_in(node->children[i], cmd);
+				make_redir_in(node->children[i]);
 			else if (node->children[i]->type == NODE_REDIR_OUT)
-				make_redir_out(node->children[i], cmd);
+				make_redir_out(node->children[i]);
 			else if (node->children[i]->type == NODE_REDIR_APPEND)
-				make_redir_append(node->children[i], cmd);
+				make_redir_append(node->children[i]);
+			else if (node->children[i]->type == NODE_HEREDOC)
+				make_heredoc(node->children[i]);
 		}
 	}
-	return (check_redirs(*cmd));
+	return (check_redirs(node->cmd));
 }

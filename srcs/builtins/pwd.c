@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:16:33 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:03:33 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:44:35 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	pwd(t_ast *node)
 {
 	char	*cwd;
 
-	if (make_redirs(node, &node->cmd) == FAILURE)
+	if (make_redirs(node) == FAILURE)
 		return (FAILURE);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)

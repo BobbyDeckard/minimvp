@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:13:56 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:27:54 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	run_cmd(t_ast *node)
 		return (fork_error());
 	if (pid == 0)
 	{
-		if (make_redirs(node, &node->cmd) == FAILURE)
+		if (make_redirs(node) == FAILURE)
 			return (FAILURE);
 		dup_fds(*node);
 		exec_cmd(node, node->cmd);

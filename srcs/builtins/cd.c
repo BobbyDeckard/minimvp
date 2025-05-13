@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:34:18 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:59:22 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:43:27 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	cd(t_ast *node)
 {
 	char	*error;
 
-	if (make_redirs(node, &node->cmd) == FAILURE)
+	// redirs with cd ? is that even possible ?
+	if (make_redirs(node) == FAILURE)
 		return (FAILURE);
 	if (chdir(node->cmd.args[1]) < 0)
 	{
