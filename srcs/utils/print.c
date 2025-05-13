@@ -12,6 +12,8 @@
 
 #include "../../incl/minishell.h"
 
+// FICHIER D'UTILS AU DEBUGGING
+
 void	print_options(void)
 {
 	printf("Invalid preset, please enter a number between 0 and 16 (included) to simulate the following presets:\n");
@@ -99,6 +101,7 @@ void	print_node_type(t_ast node)
 
 }
 
+// imprime les enfants de la node actuelle
 void	print_child(t_ast node)
 {
 	print_node_type(node);
@@ -106,6 +109,7 @@ void	print_child(t_ast node)
 		printf("%s\n", node.cmd.args[0]);
 }
 
+// imprime chaque information pertinente pour la node actuelle
 void	print_node_info(t_ast *node)
 {
 	int	i;
@@ -140,6 +144,7 @@ void	print_node_info(t_ast *node)
 	printf("\n");
 }
 
+// fonction récursive qui permet d'imprimer la totalité de l'arbre à partir de sa racine
 void	print_tree(t_ast *ast)
 {
 	int	i;

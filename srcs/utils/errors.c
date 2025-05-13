@@ -21,6 +21,7 @@ int	pipe_error(int *pids, int fd[2][2], int i, int count)
 	return (FAILURE);
 }
 
+// appelée en cas d'erreur de malloc, met fin à la séquence en cours
 void	malloc_error(t_ast *ast)
 {
 	perror("malloc");
