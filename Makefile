@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/13 15:51:05 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/13 16:08:16 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ BUILTINS = $(addprefix builtins/, $(BLTIN_FILES))
 BLTIN_FILES = builtins.c \
 			  cd.c \
 			  env.c \
+			  env_utils.c \
 			  echo.c \
 			  pwd.c
 

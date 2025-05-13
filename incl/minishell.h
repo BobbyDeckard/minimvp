@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:44:07 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:07:39 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,13 @@ int		pipe_error(int *pids, int fd[2][2], int i, int count);
 int		waitpids(int *pids, int count);
 
 /* Builtins functions */
-int	cd(t_ast *cd);
-int	echo(t_ast	*echo);
-int	env(t_ast *env);
-int	exec_builtin(t_ast *cmd);
-int	is_builtin(t_cmd cmd);
-int	pwd(t_ast *pwd);
+char	*get_str(const char *name);
+int		cd(t_ast *cd);
+int		echo(t_ast	*echo);
+int		env(t_ast *env);
+int		exec_builtin(t_ast *cmd);
+int		is_builtin(t_cmd cmd);
+int		pwd(t_ast *pwd);
 
 #include <string.h>
 

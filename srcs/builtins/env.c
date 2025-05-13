@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:37:39 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:05:29 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:06:22 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ char	*get_str(const char *name)
 		return (NULL);
 	}
 	return (str);
-}
-
-void	print_var(char *var, t_cmd cmd)
-{
 }
 
 void	print_variable(t_ast *node, const char *name)
@@ -47,7 +43,6 @@ void	print_variable(t_ast *node, const char *name)
 		ft_strlcat(var, name, len);
 		ft_strlcat(var, "=", len);
 		ft_strlcat(var, str, len);
-		print_var(var, node->cmd);
 		ft_putstr_fd(var, node->cmd.fd_out);
 		ft_putchar_fd('\n', node->cmd.fd_out);
 		free(var);
