@@ -6,31 +6,31 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:31:04 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 13:02:58 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:00:22 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-int	echo(t_ast	*echo)
+int	echo(t_ast	*node)
 {
 	int flag;
 	int	i;
 
-	if (make_redirs(echo, &echo->cmd) == FAILURE)
+	if (make_redirs(node, &node->cmd) == FAILURE)
 		return (FAILURE);
 	flag = 0;
-	if (!ft_strncmp(echo->cmd.args[1], "-n", echo->cmd.fd_out))
+	if (!ft_strncmp(node->cmd.args[1], "-n", node->cmd.fd_out))
 		flag++;
 	i = flag;
-	while (echo->cmd.args[++i])
+	while (node->cmd.args[++i])
 	{
-		ft_putstr_fd(echo->cmd.args[i], echo->cmd.fd_out);
-		if (echo->cmd.args[i + 1])
-			ft_putchar_fd(' ', echo->cmd.fd_out);
+		ft_putstr_fd(node->cmd.args[i], node->cmd.fd_out);
+		if (node->cmd.args[i + 1])
+			ft_putchar_fd(' ', node->cmd.fd_out);
 	}
 	if (!flag)
-		ft_putchar_fd('\n', echo->cmd.fd_out);
-	close_redirs(echo->cmd);
+		ft_putchar_fd('\n', node->cmd.fd_out);
+	close_redirs(node->cmd);
 	return (SUCCESS);
 }

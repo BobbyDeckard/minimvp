@@ -6,28 +6,28 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:16:33 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:41:48 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:03:33 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-int	pwd(t_ast *pwd)
+int	pwd(t_ast *node)
 {
 	char	*cwd;
 
-	if (make_redirs(pwd, &pwd->cmd) == FAILURE)
+	if (make_redirs(node, &node->cmd) == FAILURE)
 		return (FAILURE);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
 		perror("getcwd");
-		close_redirs(pwd->cmd);
+		close_redirs(node->cmd);
 		return (FAILURE);
 	}
-	ft_putstr_fd(cwd, pwd->cmd.fd_out);
-	ft_putchar_fd('\n', pwd->cmd.fd_out);
+	ft_putstr_fd(cwd, node->cmd.fd_out);
+	ft_putchar_fd('\n', node->cmd.fd_out);
 	free(cwd);
-	close_redirs(pwd->cmd);
+	close_redirs(node->cmd);
 	return (SUCCESS);
 }

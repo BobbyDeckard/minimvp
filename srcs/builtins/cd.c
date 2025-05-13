@@ -6,42 +6,42 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:34:18 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:28:19 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:59:22 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-char	*cd_error(t_ast	*cd)
+char	*cd_error(t_ast	*node)
 {
 	t_cmd	cmd;
 	char	*msg;
 	int		len;
 
-	cmd = cd->cmd;
+	cmd = node->cmd;
 	len = ft_strlen(cmd.args[1]);
 	msg = (char *) malloc((len + 5) * sizeof(char));
 	if (!msg)
-		clean_exit(cd->root, FAILURE);
+		clean_exit(node->root, FAILURE);
 	ft_strlcpy(msg, "cd: ", len + 5);
 	ft_strlcat(msg, cmd.args[1], len + 5);
 	return (msg);
 }
 
-int	cd(t_ast *cd)
+int	cd(t_ast *node)
 {
 	char	*error;
 
-	if (make_redirs(cd, &cd->cmd) == FAILURE)
+	if (make_redirs(node, &node->cmd) == FAILURE)
 		return (FAILURE);
-	if (chdir(cd->cmd.args[1]) < 0)
+	if (chdir(node->cmd.args[1]) < 0)
 	{
-		error = cd_error(cd);
+		error = cd_error(node);
 		perror(error);
 		free(error);
-		close_redirs(cd->cmd);
+		close_redirs(node->cmd);
 		return (FAILURE);
 	}
-	close_redirs(cd->cmd);
+	close_redirs(node->cmd);
 	return (SUCCESS);
 }

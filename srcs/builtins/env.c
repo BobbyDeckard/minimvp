@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:37:39 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/09 12:18:43 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:02:41 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,35 +84,35 @@ char	*get_variable(t_ast *env, char *full)
 	return (var);
 }
 
-char	**get_env_variables(t_ast *env, int count)
+char	**get_env_variables(t_ast *node, int count)
 {
 	char	**variables;
 	int		i;
 
 	variables = (char **) malloc(count * sizeof(char *));
 	if (!variables)
-		malloc_error(env);
+		malloc_error(node);
 	i = -1;
-	while (env->root->envp[++i])
-		variables[i] = get_variable(env, env->root->envp[i]);
+	while (node->root->envp[++i])
+		variables[i] = get_variable(node, node->root->envp[i]);
 	return (variables);
 }
 
-int	env(t_ast *env)
+int	env(t_ast *node)
 {
 	char	**variables;
 	int		count;
 	int		i;
 
-	if (make_redirs(env, &env->cmd) == FAILURE)
+	if (make_redirs(node, &node->cmd) == FAILURE)
 		return (FAILURE);
-	count = count_variables(env);
+	count = count_variables(node);
 	if (count)
-		variables = get_env_variables(env, count);
+		variables = get_env_variables(node, count);
 	i = -1;
 	while (++i < count)
 	{
-		print_variable(env, variables[i]);
+		print_variable(node, variables[i]);
 		free(variables[i]);
 	}
 	free(variables);
