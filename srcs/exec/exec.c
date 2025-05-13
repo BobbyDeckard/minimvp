@@ -6,87 +6,87 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 12:44:28 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:49:36 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-void	exec_cmd(t_ast *ast, t_cmd cmd)
+void	exec_cmd(t_ast *node, t_cmd cmd)
 {
-	get_cmd_path(&cmd, ast->root->paths);
+	get_cmd_path(&cmd, node->root->paths);
 	if (!cmd.path)
 	{
 		ft_putstr_fd(cmd.args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		exit(1);
 	}
-	if (execve(cmd.path, cmd.args, ast->root->envp) == -1)
+	if (execve(cmd.path, cmd.args, node->root->envp) == -1)
 		perror("execve");
 }
 
-int	run_cmd(t_ast *ast)
+int	run_cmd(t_ast *node)
 {
 	int		status;
 	int		pid;
 
 	status = -1;
-	if (is_builtin(ast->cmd))
-		return (exec_builtin(ast));
+	if (is_builtin(node->cmd))
+		return (exec_builtin(node));
 	pid = fork();
 	if (pid < 0)
 		return (fork_error());
 	if (pid == 0)
 	{
-		if (make_redirs(ast, &ast->cmd) == FAILURE)
+		if (make_redirs(node, &node->cmd) == FAILURE)
 			return (FAILURE);
-		dup_fds(*ast);
-		exec_cmd(ast, ast->cmd);
-		cleanup(ast->root);
+		dup_fds(*node);
+		exec_cmd(node, node->cmd);
+		cleanup(node->root);
 		exit(FAILURE);
 	}
-	close_redirs(ast->cmd);
+	close_redirs(node->cmd);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
 	return (status);
 }
 
-int	exec_or_if(t_ast **children)
+int	exec_or_if(t_ast **child)
 {
 	int	i;
 
 	i = -1;
-	while (children[++i])
+	while (child[++i])
 	{
-		if (exec_ast(children[i]) == SUCCESS)
+		if (exec_ast(child[i]) == SUCCESS)
 			return (SUCCESS);
 	}
 	return (FAILURE);
 }
 
-int	exec_and_if(t_ast **children)
+int	exec_and_if(t_ast **child)
 {
 	int	i;
 
 	i = -1;
-	while (children[++i])
+	while (child[++i])
 	{
-		if (exec_ast(children[i]) != SUCCESS)
+		if (exec_ast(child[i]) != SUCCESS)
 			return (FAILURE);
 	}
 	return (SUCCESS);
 }
 
-int	exec_ast(t_ast *ast)
+int	exec_ast(t_ast *node)
 {
-	if (ast->type == NODE_CMD)
-		return (run_cmd(ast));
-	else if (ast->type == NODE_OR_IF && ast->children)
-		return (exec_or_if(ast->children));
-	else if (ast->type == NODE_AND_IF && ast->children)
-		return (exec_and_if(ast->children));
-	else if (ast->type == NODE_PIPE && ast->children)
-		return (exec_pipe(ast->children));
+	if (node->type == NODE_CMD)
+		return (run_cmd(node));
+	else if (node->type == NODE_OR_IF && node->children)
+		return (exec_or_if(node->children));
+	else if (node->type == NODE_AND_IF && node->children)
+		return (exec_and_if(node->children));
+	else if (node->type == NODE_PIPE && node->children)
+		return (exec_pipe(node->children));
 	return (FAILURE);
 }
