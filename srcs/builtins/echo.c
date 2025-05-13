@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:31:04 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 19:44:24 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:13:56 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ int	echo(t_ast	*node)
 	}
 	if (!flag)
 		ft_putchar_fd('\n', node->cmd.fd_out);
-	close_redirs(node->cmd);
+	close_redirs(node->children[0], node->cmd);
 	return (SUCCESS);
 }

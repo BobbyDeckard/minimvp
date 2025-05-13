@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 19:41:16 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:11:00 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ char	**ft_split_path(const char *s, char c);
 char	**get_paths(void);
 
 /* Execution functions */
-void	close_redirs(t_cmd cmd);
+void	close_redirs(t_ast *child, t_cmd cmd);
 void	dup_fds(t_ast ast);
 void	exec_cmd(t_ast *ast, t_cmd cmd);
 void	exec_pipe_child(t_ast *child);
 void	get_cmd_path(t_cmd *cmd, char **paths);
 void	make_heredoc(t_ast *node);
 void	reset_std_fds(void);
-int		check_redirs(t_cmd cmd);
+int		check_redirs(t_ast *child, t_cmd cmd);
 int		exec_ast(t_ast *ast);
 int		exec_pipe(t_ast **children);
 int		exec_subshell(t_ast *node);

@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:35:00 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:45:28 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:53:13 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	print_options(void)
 	printf("15:\tcd srcs && pwd || echo fail\n");
 	printf("16:\tenv\n");
 	printf("17:\t[subshell]\n");
+	printf("18:\t<< end grep foo\n");
 
 }
 
@@ -77,6 +78,8 @@ void	print_cmd(int mode)
 		printf("env\n");
 	else if (mode == 17)
 		printf("[subshell]\n");
+	else if (mode == 18)
+		printf("<< end grep foo\n");
 	printf("\n");
 }
 

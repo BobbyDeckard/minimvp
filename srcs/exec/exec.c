@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 19:27:54 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:09:55 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,17 @@ int	run_cmd(t_ast *node)
 	{
 		if (make_redirs(node) == FAILURE)
 			return (FAILURE);
+		printf("Redir made, about to dup2\n");
 		dup_fds(*node);
+		printf("dup2 made\n");
 		exec_cmd(node, node->cmd);
+		printf("Bad news...\n");
 		cleanup(node->root);
 		exit(FAILURE);
 	}
-	close_redirs(node->cmd);
+	close_redirs(node->children[0], node->cmd);
 	waitpid(pid, &status, 0);
+	printf("Child process done\n");
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
 	return (status);

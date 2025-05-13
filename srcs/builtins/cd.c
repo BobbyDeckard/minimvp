@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:34:18 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 19:43:27 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:13:45 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	cd(t_ast *node)
 		error = cd_error(node);
 		perror(error);
 		free(error);
-		close_redirs(node->cmd);
+		close_redirs(node->children[0], node->cmd);
 		return (FAILURE);
 	}
-	close_redirs(node->cmd);
+	close_redirs(node->children[0], node->cmd);
 	return (SUCCESS);
 }

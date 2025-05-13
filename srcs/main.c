@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:47:16 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:44:47 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:52:27 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int main(int ac, char **av, char **envp)
 		{
 			preset = ft_atoi(command);
 			add_history(command);
-			if (preset > 17 || !ft_isdigit(command[0]))
+			if (preset > 18 || !ft_isdigit(command[0]))
 			{
 				print_options();
 				free(command);

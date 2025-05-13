@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:44:33 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 19:52:12 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1046,6 +1046,37 @@ t_ast	*make_subshell(void)
 	return (sub);
 }
 
+t_ast	*make_heredoc_ast(void)
+{
+	// << end grep foo
+	t_ast	*here;
+	here = (t_ast *) malloc(sizeof(t_ast));
+	if (!here)
+		exit(1);
+	here->type = NODE_HEREDOC;
+	here->cmd.args = NULL;
+	here->children = NULL;
+	here->file = "end";
+
+	t_ast	*grep;
+	grep = (t_ast *) malloc(sizeof(t_ast));
+	if (!grep)
+		exit(1);
+	grep->type = NODE_CMD;
+	grep->cmd.args = make_args(2, "grep", "foo");
+	grep->cmd.fd_in = STDIN_FILENO;
+	grep->cmd.fd_out = STDOUT_FILENO;
+	grep->children = (t_ast **) malloc(2 * sizeof(t_ast *));
+	if (!grep->children)
+		exit(1);
+	grep->children[0] = here;
+	grep->children[1] = NULL;
+	grep->file = NULL;
+
+	set_root_node(grep, grep);
+	return (grep);
+}
+
 t_ast	*make_ast(int mode)
 {
 	if (mode == 0)
@@ -1084,5 +1115,7 @@ t_ast	*make_ast(int mode)
 		return (make_env());
 	else if (mode == 17)
 		return (make_subshell());
+	else if (mode == 18)
+		return (make_heredoc_ast());
 	return (NULL);
 }
