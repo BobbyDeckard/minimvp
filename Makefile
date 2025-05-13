@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/08 17:47:42 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/09 13:44:28 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ EXEC_FILES = exec.c \
 			 redirs_utils.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = cleanup.c \
+			  cwd.c \
 			  errors.c \
 			  print.c
 BUILTINS = $(addprefix builtins/, $(BLTIN_FILES))

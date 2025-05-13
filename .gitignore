@@ -43,7 +43,6 @@ minimvp
 *.idb
 *.pdb
 srcs/pseudo_parsing/gpt_parsing.c
-srcs/utils/cwd.c
 outfile
 
 # Kernel Module Compile Results

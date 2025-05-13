@@ -15,7 +15,6 @@
 int main(int ac, char **av, char **envp)
 {
 	t_ast	*ast;
-	char	**paths;
 	char	*command;
 	char	*cwd;
 	int		preset;
@@ -30,37 +29,23 @@ int main(int ac, char **av, char **envp)
 		free(cwd);
 		if (command)
 		{
-			paths = get_paths();
 			preset = ft_atoi(command);
 			add_history(command);
 			if (preset > 16 || !ft_isdigit(command[0]))
 			{
-				printf("Invalid preset, please enter a number between 0 and 16 (included) to simulate the following presets:\n");
-				printf("0:\tcat file | grep foo\n");
-				printf("1:\tcat file | grep foo | grep bar | wc -l\n");
-				printf("2:\t< file wc -l > outfile\n");
-				printf("3:\t< file grep foo | wc -l > outfile\n");
-				printf("4:\t< file grep foo | grep bar | grep foobar | wc -l > outfile\n");
-				printf("5:\tcat file && echo ok\n");
-				printf("6:\tcat file || echo fail\n");
-				printf("7:\tcat file && echo ok || echo fail\n");
-				printf("8:\t< infile grep foo | wc -l > outfile && echo ok || echo fail\n");
-				printf("9:\tcat file | (grep foo && grep bar)\n");
-				printf("10:\tcat file | (grep foo || grep bar)\n");
-				printf("11:\tcat file | (cat infile && grep foo)\n");
-				printf("12\techo -n hello\n");
-				printf("13\techo hello there > outfile\n");
-				printf("14:\techo hello there | wc -w\n");
-				printf("15:\tcd srcs && pwd\n");
-				printf("16:\tenv\n");
+				print_options();
+				free(command);
 			}
-			free(command);
-			print_cmd(preset);
-			ast = make_ast(preset);
-			ast->paths = paths;
-			ast->envp = envp;
-			exec_ast(ast);
-			cleanup(ast);
+			else
+			{
+				free(command);
+				print_cmd(preset);
+				ast = make_ast(preset);
+				ast->paths = get_paths();
+				ast->envp = envp;
+				exec_ast(ast);
+				cleanup(ast->root);
+			}
 		}
 		else
 			break;

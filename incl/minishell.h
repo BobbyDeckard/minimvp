@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/09 11:25:02 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:43:31 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int		make_redirs(t_ast *ast, t_cmd *cmd);
 void	clean_exit(t_ast *root, int status);
 void	cleanup(t_ast *ast);
 void	print_cmd(int mode);
+void	print_options(void);
 void	dup2_error(void);
 void	malloc_error(t_ast *ast);
 void	print_tree(t_ast *ast);

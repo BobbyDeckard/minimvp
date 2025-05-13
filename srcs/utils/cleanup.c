@@ -18,7 +18,9 @@ void	clean_paths(char **paths)
 
 	i = -1;
 	while (paths[++i])
+	{
 		free(paths[i]);
+	}
 	free(paths);
 }
 
