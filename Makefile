@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/13 15:31:51 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/13 15:34:14 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ EXEC_FILES = exec.c \
 			 get_path.c \
 			 pipe.c \
 			 pipe_utils.c \
+			 pipe_utils2.c \
 			 redirs.c \
 			 redirs_utils.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
