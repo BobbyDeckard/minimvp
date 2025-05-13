@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:07:27 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:50:14 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:26:43 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,6 @@ char **make_args(int count, ...) {
 
     va_end(args);
     return argv;
-}
-
-void	set_root_node(t_ast *ast, t_ast *root)
-{
-	int	i;
-
-	ast->root = root;
-	if (ast->children)
-	{
-		i = -1;
-		while (ast->children[++i])
-			set_root_node(ast->children[i], root);
-	}
 }
 
 t_ast	*make_simple_pipe(void)
