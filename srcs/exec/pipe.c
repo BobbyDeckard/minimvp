@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:34:45 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:41:24 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,20 @@ void	exec_pipe_cmd(t_ast *cmd)
 	clean_exit(cmd->root, FAILURE);
 }
 
-void	exec_pipe_and(t_ast *and)
+void	exec_pipe_and(t_ast *node)
 {
 	int	status;
 	int	pid;
 	int	i;
 
 	i = -1;
-	while (and->children[++i])
+	while (node->children[++i])
 	{
-		if (and->children[i]->type == NODE_CMD)
+		if (node->children[i]->type == NODE_CMD)
 		{
 			pid = make_fork();
 			if (pid == 0)
-				exec_pipe_cmd(and->children[i]);
+				exec_pipe_child(node->children[i]);
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status))
 				status = WEXITSTATUS(status);
@@ -42,38 +42,28 @@ void	exec_pipe_and(t_ast *and)
 				break ;
 		}
 		else
-			exec_pipe_child(and->children[i]);
+			exec_pipe_child(node->children[i]);
 	}
 }
 
-void	exec_pipe_or(t_ast *or)
+void	exec_pipe_or(t_ast *node)
 {
 	int	status;
 	int	pid;
 	int	i;
 
 	i = -1;
-	while (or->children[++i])
+	while (node->children[++i])
 	{
 		pid = make_fork();
 		if (pid == 0)
-			exec_pipe_child(or->children[i]);
+			exec_pipe_child(node->children[i]);
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);
 		if (status == SUCCESS)
 			break ;
 	}
-}
-
-void	exec_pipe_child(t_ast *child)
-{
-	if (child->type == NODE_CMD)
-		exec_pipe_cmd(child);
-	else if (child->type == NODE_AND_IF)
-		exec_pipe_and(child);
-	else if (child->type == NODE_OR_IF)
-		exec_pipe_or(child);
 }
 
 int	run_pipe(t_ast **children, int *pids, int count)
