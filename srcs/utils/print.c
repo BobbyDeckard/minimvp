@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:35:00 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 17:50:30 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:45:28 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	print_options(void)
 	printf("14:\techo hello there | wc -w\n");
 	printf("15:\tcd srcs && pwd || echo fail\n");
 	printf("16:\tenv\n");
+	printf("17:\t[subshell]\n");
 
 }
 
@@ -74,6 +75,8 @@ void	print_cmd(int mode)
 		printf("cd srcs && pwd || echo fail\n");
 	else if (mode == 16)
 		printf("env\n");
+	else if (mode == 17)
+		printf("[subshell]\n");
 	printf("\n");
 }
 
