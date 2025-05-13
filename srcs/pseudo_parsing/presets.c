@@ -956,7 +956,7 @@ t_ast	*make_echo_pipe(void)
 
 t_ast	*make_cd_pwd(void)
 {
-	// cd srcs && pwd
+	// cd srcs && pwd || echo fail
 
 	t_ast	*cd;
 	cd = (t_ast *) malloc(sizeof(t_ast));
@@ -980,6 +980,17 @@ t_ast	*make_cd_pwd(void)
 	pwd->children = NULL;
 	pwd->file = NULL;
 
+	t_ast	*echo;
+	echo = (t_ast *) malloc(sizeof(t_ast));
+	if (!echo)
+		exit(1);
+	echo->type = NODE_CMD;
+	echo->cmd.args = make_args(2, "echo", "fail");
+	echo->cmd.fd_in = STDIN_FILENO;
+	echo->cmd.fd_out = STDOUT_FILENO;
+	echo->children = NULL;
+	echo->file = NULL;
+
 	t_ast	*and;
 	and = (t_ast *) malloc(sizeof(t_ast));
 	if (!and)
@@ -994,9 +1005,23 @@ t_ast	*make_cd_pwd(void)
 	and->children[2] = NULL;
 	and->file = NULL;
 
-	set_root_node(and, and);
+	t_ast	*or;
+	or = (t_ast *) malloc(sizeof(t_ast));
+	if (!or)
+		exit(1);
+	or->type = NODE_OR_IF;
+	or->cmd.args = NULL;
+	or->children = (t_ast **) malloc(3 * sizeof(t_ast *));
+	if (!or->children)
+		exit(1);
+	or->children[0] = and;
+	or->children[1] = echo;
+	or->children[2] = NULL;
+	or->file = NULL;
+
+	set_root_node(or, or);
 	
-	return (and);
+	return (or);
 }
 
 t_ast	*make_env(void)

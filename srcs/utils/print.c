@@ -30,7 +30,7 @@ void	print_options(void)
 	printf("12\techo -n hello\n");
 	printf("13\techo hello there > outfile\n");
 	printf("14:\techo hello there | wc -w\n");
-	printf("15:\tcd srcs && pwd\n");
+	printf("15:\tcd srcs && pwd || echo fail\n");
 	printf("16:\tenv\n");
 
 }
@@ -69,7 +69,7 @@ void	print_cmd(int mode)
 	else if (mode == 14)
 		printf("echo hello there | wc -w\n");
 	else if (mode == 15)
-		printf("cd srcs && pwd\n");
+		printf("cd srcs && pwd || echo fail\n");
 	else if (mode == 16)
 		printf("env\n");
 	printf("\n");
