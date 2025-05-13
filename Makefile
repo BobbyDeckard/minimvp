@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/13 16:08:16 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/13 16:14:40 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ EXEC_FILES = exec.c \
 			 pipe_utils.c \
 			 pipe_utils2.c \
 			 redirs.c \
-			 redirs_utils.c
+			 redirs_utils.c \
+			 subshell.c
 UTILS = $(addprefix utils/, $(UTILS_FILES))
 UTILS_FILES = ast_utils.c \
 			  cleanup.c \

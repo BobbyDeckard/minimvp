@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 00:30:32 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:49:36 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:13:56 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,7 @@ int	exec_ast(t_ast *node)
 		return (exec_and_if(node->children));
 	else if (node->type == NODE_PIPE && node->children)
 		return (exec_pipe(node->children));
+	else if (node->type == NODE_SUBSHELL)
+		return (exec_subshell(node));
 	return (FAILURE);
 }

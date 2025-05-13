@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:12:01 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:42:22 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ typedef enum e_node_type
 	NODE_REDIR_IN,
 	NODE_REDIR_OUT,
 	NODE_REDIR_APPEND,
-	NODE_HEREDOC
+	NODE_HEREDOC,
+	NODE_SUBSHELL
 }	t_node_type;
 
 /* Structs */
@@ -79,6 +80,7 @@ void	reset_std_fds(void);
 int		check_redirs(t_cmd cmd);
 int		exec_ast(t_ast *ast);
 int		exec_pipe(t_ast **children);
+int		exec_subshell(t_ast *node);
 int		make_redirs(t_ast *ast, t_cmd *cmd);
 
 /* Utilities functions */
