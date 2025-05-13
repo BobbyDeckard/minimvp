@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:43:45 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:53:05 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	exec_pipe_or(t_ast *node)
 	}
 }
 
-int	run_pipe(t_ast **children, int *pids, int count)
+int	run_pipe(t_ast **child, int *pids, int count)
 {
 	int	fd[2][2];
 	int	i;
@@ -77,19 +77,19 @@ int	run_pipe(t_ast **children, int *pids, int count)
 		if (i + 1 < count && make_pipe(fd[i % 2]))
 		{
 			if (make_pipe(fd[i % 2]))
-				link_pipe(children[i], children[i + 1], fd, i);
+				link_pipe(child[i], child[i + 1], fd, i);
 			else
 				return (pipe_error(pids, fd, i, count));
 		}
-		if (children[i] == NODE_CMD && is_builtin(children[i]->cmd))
+		if (child[i] == NODE_CMD && is_builtin(child[i]->cmd))
 		{
 			pids[i] = -1;
-			exec_builtin(children[i]);
+			exec_builtin(child[i]);
 		}
 		else
 			pids[i] = make_fork();
 		if (pids[i] == 0)
-			exec_pipe_child(children[i]);
+			exec_pipe_child(child[i]);
 		close_pipes(fd, i, count);
 	}
 	return (waitpids(pids, count));
