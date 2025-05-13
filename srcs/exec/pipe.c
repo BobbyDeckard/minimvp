@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/08 13:22:06 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:30:08 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	exec_pipe_and(t_ast *and)
 			if (WIFEXITED(status))
 				status = WEXITSTATUS(status);
 			if (status != SUCCESS)
-				break;
+				break ;
 		}
 		else
 			exec_pipe_child(and->children[i]);
@@ -101,7 +101,7 @@ void	exec_pipe_or(t_ast *or)
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);
 		if (status == SUCCESS)
-			break;
+			break ;
 	}
 }
 
