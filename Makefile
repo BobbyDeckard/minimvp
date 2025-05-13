@@ -6,7 +6,7 @@
 #    By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/27 14:35:02 by imeulema          #+#    #+#              #
-#    Updated: 2025/05/13 15:34:14 by imeulema         ###   ########.fr        #
+#    Updated: 2025/05/13 15:51:05 by imeulema         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,8 +35,7 @@ OBJS = $(patsubst $(PATH_SRCS)%.c, $(PATH_OBJS)%.o, $(SRCS))
 
 # SOURCE FILES
 PSEUDO = $(addprefix pseudo_parsing/, $(PSEUDO_FILES))
-PSEUDO_FILES = ft_split_path.c \
-			   presets.c
+PSEUDO_FILES = presets.c
 EXEC = $(addprefix exec/, $(EXEC_FILES))
 EXEC_FILES = exec.c \
 			 exec_utils.c \
@@ -51,6 +50,7 @@ UTILS_FILES = ast_utils.c \
 			  cleanup.c \
 			  cwd.c \
 			  errors.c \
+			  ft_split_path.c \
 			  print.c
 BUILTINS = $(addprefix builtins/, $(BLTIN_FILES))
 BLTIN_FILES = builtins.c \
