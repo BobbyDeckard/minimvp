@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:37:39 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 16:02:41 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:05:29 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ char	*get_str(const char *name)
 
 void	print_var(char *var, t_cmd cmd)
 {
-	ft_putstr_fd(var, cmd.fd_out);
-	ft_putchar_fd('\n', cmd.fd_out);
 }
 
-void	print_variable(t_ast *env, const char *name)
+void	print_variable(t_ast *node, const char *name)
 {
 	char	*var;
 	char	*str;
@@ -45,23 +43,25 @@ void	print_variable(t_ast *env, const char *name)
 		len = str_len + ft_strlen(name) + 2;	// + 2 accounts for the added '=' and the NULL-termination of the string
 		var = (char *) malloc(len * sizeof(char));
 		if (!var)
-			malloc_error(env);
+			malloc_error(node);
 		ft_strlcat(var, name, len);
 		ft_strlcat(var, "=", len);
 		ft_strlcat(var, str, len);
-		print_var(var, env->cmd);
+		print_var(var, node->cmd);
+		ft_putstr_fd(var, node->cmd.fd_out);
+		ft_putchar_fd('\n', node->cmd.fd_out);
 		free(var);
 	}
 }
 
-int	count_variables(t_ast *env)
+int	count_variables(t_ast *node)
 {
 	int	count;
 
-	if (!env->root->envp)
+	if (!node->root->envp)
 		return (0);
 	count = 0;
-	while (env->root->envp[count])
+	while (node->root->envp[count])
 		count++;
 	return (count);
 }
