@@ -6,19 +6,19 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 21:22:44 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:41:24 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:43:45 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-void	exec_pipe_cmd(t_ast *cmd)
+void	exec_pipe_cmd(t_ast *node)
 {
-	if (make_redirs(cmd, &cmd->cmd) == FAILURE)
-		clean_exit(cmd->root, FAILURE);
-	dup_fds(*cmd);
-	exec_cmd(cmd, cmd->cmd);
-	clean_exit(cmd->root, FAILURE);
+	if (make_redirs(node, &node->cmd) == FAILURE)
+		clean_exit(node->root, FAILURE);
+	dup_fds(*node);
+	exec_cmd(node, node->cmd);
+	clean_exit(node->root, FAILURE);
 }
 
 void	exec_pipe_and(t_ast *node)

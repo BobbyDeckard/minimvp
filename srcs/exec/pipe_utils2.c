@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:33:22 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:33:52 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:42:53 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,14 @@ void	link_pipe(t_ast *cmd1, t_ast *cmd2, int fd[2][2], int i)
 		while (cmd2->children[++j])
 			cmd2->children[j]->cmd.fd_in = fd[i % 2][0];
 	}
+}
+
+void	exec_pipe_child(t_ast *child)
+{
+	if (child->type == NODE_CMD)
+		exec_pipe_cmd(child);
+	else if (child->type == NODE_AND_IF)
+		exec_pipe_and(child);
+	else if (child->type == NODE_OR_IF)
+		exec_pipe_or(child);
 }

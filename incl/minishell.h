@@ -6,7 +6,7 @@
 /*   By: imeulema <imeulema@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 23:54:26 by imeulema          #+#    #+#             */
-/*   Updated: 2025/05/13 15:40:25 by imeulema         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:44:07 by imeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int		fork_error(void);
 void	close_pipes(int fd[2][2], int i, int count);
 void	exec_pipe_and(t_ast *node);
 void	exec_pipe_child(t_ast *child);
+void	exec_pipe_cmd(t_ast *node);
 void	exec_pipe_or(t_ast *node);
 void	link_pipe(t_ast *cmd1, t_ast *cmd2, int fd[2][2], int i);
 int		*init_pids(int count);
