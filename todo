@@ -1,3 +1,5 @@
 1. Make sure errors are handled properly.
 2. Implement heredoc.
 3. Implement builtins.
+4. Check redirs with parentheses
+5. Check redirs with cd ?
