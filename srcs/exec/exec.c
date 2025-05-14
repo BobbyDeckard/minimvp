@@ -38,7 +38,7 @@ int	run_cmd(t_ast *node)
 		return (fork_error());
 	if (pid == 0)
 	{
-		if (make_redirs(node) == FAILURE)
+		if (make_redirs(node, &node->cmd) == FAILURE)
 			return (FAILURE);
 		dup_fds(*node);
 		exec_cmd(node, node->cmd);
@@ -47,7 +47,6 @@ int	run_cmd(t_ast *node)
 	}
 	close_redirs(node->children[0], node->cmd);
 	waitpid(pid, &status, 0);
-	printf("Child process done\n");
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
 	return (status);

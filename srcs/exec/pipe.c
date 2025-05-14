@@ -14,7 +14,7 @@
 
 void	exec_pipe_cmd(t_ast *node)
 {
-	if (make_redirs(node) == FAILURE)
+	if (make_redirs(node, &node->cmd) == FAILURE)
 		clean_exit(node->root, FAILURE);
 	dup_fds(*node);
 	exec_cmd(node, node->cmd);

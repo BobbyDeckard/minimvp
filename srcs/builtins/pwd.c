@@ -16,7 +16,7 @@ int	pwd(t_ast *node)
 {
 	char	*cwd;
 
-	if (make_redirs(node) == FAILURE)
+	if (make_redirs(node, &node->cmd) == FAILURE)
 		return (FAILURE);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)

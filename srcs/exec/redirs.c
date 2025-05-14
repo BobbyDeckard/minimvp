@@ -12,37 +12,37 @@
 
 #include "../../incl/minishell.h"
 
-void	make_redir_in(t_ast *node)
+void	make_redir_in(t_ast *node, t_cmd *cmd)
 {
 	if (access(node->file, F_OK) != 0 || access(node->file, R_OK) != 0)
-		node->cmd.fd_in = -1;
+		cmd->fd_in = -1;
 	else
-		node->cmd.fd_in = open(node->file, O_RDONLY);
-	if (node->cmd.fd_in < 0)
+		cmd->fd_in = open(node->file, O_RDONLY);
+	if (cmd->fd_in < 0)
 		perror(node->file);
 }
 
-void	make_redir_out(t_ast *node)
+void	make_redir_out(t_ast *node, t_cmd *cmd)
 {
 	if (access(node->file, F_OK) == 0 && access(node->file, W_OK) != 0)
-		node->cmd.fd_out = -1;
+		cmd->fd_out = -1;
 	else
-		node->cmd.fd_out = open(node->file, O_TRUNC | O_WRONLY | O_CREAT, 0644);
-	if (node->cmd.fd_out < 0)
+		cmd->fd_out = open(node->file, O_TRUNC | O_WRONLY | O_CREAT, 0644);
+	if (cmd->fd_out < 0)
 		perror(node->file);
 }
 
-void	make_redir_append(t_ast *node)
+void	make_redir_append(t_ast *node, t_cmd *cmd)
 {
 	if (access(node->file, F_OK) == 0 && access(node->file, W_OK) != 0)
-		node->cmd.fd_out = -1;
+		cmd->fd_out = -1;
 	else
-		node->cmd.fd_out = open(node->file, O_APPEND | O_WRONLY | O_CREAT, 0644);
-	if (node->cmd.fd_out < 0)
+		cmd->fd_out = open(node->file, O_APPEND | O_WRONLY | O_CREAT, 0644);
+	if (cmd->fd_out < 0)
 		perror(node->file);
 }
 
-int	make_redirs(t_ast *node)
+int	make_redirs(t_ast *node, t_cmd *cmd)
 {
 	int	i;
 
@@ -52,13 +52,13 @@ int	make_redirs(t_ast *node)
 		while (node->children[++i])
 		{
 			if (node->children[i]->type == NODE_REDIR_IN)
-				make_redir_in(node->children[i]);
+				make_redir_in(node->children[i], cmd);
 			else if (node->children[i]->type == NODE_REDIR_OUT)
-				make_redir_out(node->children[i]);
+				make_redir_out(node->children[i], cmd);
 			else if (node->children[i]->type == NODE_REDIR_APPEND)
-				make_redir_append(node->children[i]);
+				make_redir_append(node->children[i], cmd);
 			else if (node->children[i]->type == NODE_HEREDOC)
-				make_heredoc(node->children[i]);
+				make_heredoc(node->children[i], cmd);
 		}
 	}
 	return (check_redirs(node->children[0], node->cmd));

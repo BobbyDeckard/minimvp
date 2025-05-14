@@ -76,13 +76,13 @@ void	dup_fds(t_ast ast);
 void	exec_cmd(t_ast *ast, t_cmd cmd);
 void	exec_pipe_child(t_ast *child);
 void	get_cmd_path(t_cmd *cmd, char **paths);
-void	make_heredoc(t_ast *node);
+void	make_heredoc(t_ast *node, t_cmd *cmd);
 void	reset_std_fds(void);
 int		check_redirs(t_ast *child, t_cmd cmd);
 int		exec_ast(t_ast *ast);
 int		exec_pipe(t_ast **children);
 int		exec_subshell(t_ast *node);
-int		make_redirs(t_ast *ast);
+int		make_redirs(t_ast *ast, t_cmd *cmd);
 
 /* Utilities functions */
 void	clean_exit(t_ast *root, int status);
