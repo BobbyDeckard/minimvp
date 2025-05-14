@@ -38,7 +38,7 @@ int	file_namer_2000(t_ast *node, t_cmd *cmd)
 	i = -1;
 	while (++i < 128)
 	{
-		j = 0;
+		j = 32;
 		while (++j < 128)
 		{
 			name[i] = j;
@@ -57,16 +57,24 @@ void	make_heredoc(t_ast *node, t_cmd *cmd)
 
 	delimiter = node->file;
 	len = ft_strlen(delimiter) + 1;
-	if (file_namer_2000(node, cmd) == FAILURE)
+//	if (file_namer_2000(node, cmd) == FAILURE)
+//		return ;
+	if (!check_and_open("temp", node, cmd))
 		return ;
+	printf("Created and opened new file, name: %s\n", node->file);
 	while (1)
 	{
 		line = readline(">");
-		ft_putstr_fd(line, node->cmd.fd_in);
-		ft_putchar_fd('\n', node->cmd.fd_in);
 		if (!ft_strncmp(line, delimiter, len))
 			break ;
+		ft_putstr_fd(line, cmd->fd_in);
+		ft_putchar_fd('\n', cmd->fd_in);
 		free(line);
 	}
 	free(line);
+	close(cmd->fd_in);
+	printf("About to open %s\n", node->file);
+	cmd->fd_in = open(node->file, O_RDONLY);
+	if (cmd->fd_in < 0)
+		perror(node->file);
 }

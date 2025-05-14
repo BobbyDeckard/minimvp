@@ -19,6 +19,7 @@ void	dup_fds(t_ast node)
 	{
 		if (dup2(node.cmd.fd_in, STDIN_FILENO) == -1)
 			dup2_error();
+		printf("dup2 on stdin made\n");
 		close(node.cmd.fd_in);
 	}
 	if (node.cmd.fd_out != STDOUT_FILENO && node.cmd.fd_out >= 0)
