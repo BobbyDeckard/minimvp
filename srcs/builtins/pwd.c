@@ -22,12 +22,14 @@ int	pwd(t_ast *node)
 	if (!cwd)
 	{
 		perror("getcwd");
-		close_redirs(node->children[0], node->cmd);
+		close_redirs(node->cmd);
+		unlink_heredoc(node);
 		return (FAILURE);
 	}
 	ft_putstr_fd(cwd, node->cmd.fd_out);
 	ft_putchar_fd('\n', node->cmd.fd_out);
 	free(cwd);
-	close_redirs(node->children[0], node->cmd);
+	close_redirs(node->cmd);
+	unlink_heredoc(node);
 	return (SUCCESS);
 }

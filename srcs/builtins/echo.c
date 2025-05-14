@@ -31,6 +31,7 @@ int	echo(t_ast	*node)
 	}
 	if (!flag)
 		ft_putchar_fd('\n', node->cmd.fd_out);
-	close_redirs(node->children[0], node->cmd);
+	close_redirs(node->cmd);
+	unlink_heredoc(node);
 	return (SUCCESS);
 }

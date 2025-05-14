@@ -61,5 +61,5 @@ int	make_redirs(t_ast *node, t_cmd *cmd)
 				make_heredoc(node->children[i], cmd);
 		}
 	}
-	return (check_redirs(node->children[0], node->cmd));
+	return (check_redirs(node, node->cmd));
 }

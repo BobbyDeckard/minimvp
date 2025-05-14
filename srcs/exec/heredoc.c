@@ -15,6 +15,15 @@
 // << word
 // reads input until it finds a line containing only word with no trailing blanks
 
+void	unlink_heredoc(t_ast *node)
+{
+	if (node->children && node->children[0]->type == NODE_HEREDOC)
+	{
+		printf("About to unlink %s\n", node->children[0]->file);
+		unlink(node->children[0]->file);
+	}
+}
+
 int	check_and_open(char *name, t_ast *node, t_cmd *cmd)
 {
 	if (access(name, F_OK) == 0)
@@ -73,7 +82,6 @@ void	make_heredoc(t_ast *node, t_cmd *cmd)
 	}
 	free(line);
 	close(cmd->fd_in);
-	printf("About to open %s\n", node->file);
 	cmd->fd_in = open(node->file, O_RDONLY);
 	if (cmd->fd_in < 0)
 		perror(node->file);

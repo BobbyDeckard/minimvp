@@ -12,22 +12,20 @@
 
 #include "../../incl/minishell.h"
 
-void	close_redirs(t_ast *child, t_cmd cmd)
+void	close_redirs(t_cmd cmd)
 {
 	if (cmd.fd_in != STDIN_FILENO && cmd.fd_in >= 0)
 		close(cmd.fd_in);
-//	if (child->type == NODE_HEREDOC)
-//		unlink(child->file);
 	if (cmd.fd_out != STDOUT_FILENO && cmd.fd_out >= 0)
 		close(cmd.fd_out);
-	(void) child;
 }
 
-int	check_redirs(t_ast *child, t_cmd cmd)
+int	check_redirs(t_ast *node, t_cmd cmd)
 {
 	if (cmd.fd_in < 0 || cmd.fd_out < 0)
 	{
-		close_redirs(child, cmd);
+		close_redirs(cmd);
+		unlink_heredoc(node);
 		return (FAILURE);
 	}
 	return (SUCCESS);

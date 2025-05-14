@@ -40,9 +40,11 @@ int	cd(t_ast *node)
 		error = cd_error(node);
 		perror(error);
 		free(error);
-		close_redirs(node->children[0], node->cmd);
+		close_redirs(node->cmd);
+		unlink_heredoc(node);
 		return (FAILURE);
 	}
-	close_redirs(node->children[0], node->cmd);
+	close_redirs(node->cmd);
+	unlink_heredoc(node);
 	return (SUCCESS);
 }
