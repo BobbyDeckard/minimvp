@@ -36,7 +36,7 @@ int	exec_subshell(t_ast *node)
 		ft_strlcat(path, cwd, len);
 		ft_strlcat(path, "/minimvp", len);
 		printf("subshell about to be launched with path = %s\n", path);
-		if (execve(path, NULL, node->root->envp) == -1)
+		if (execve(path, &path, node->root->envp) == -1)
 			perror("execve");
 		free(path);
 		cleanup(node->root);

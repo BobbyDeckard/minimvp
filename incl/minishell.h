@@ -21,6 +21,8 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdbool.h>			// autorisé ?
+# include <sys/wait.h>
+# include <sys/types.h>
 # include "../libft/libft.h"
 
 # ifndef SUCCESS
