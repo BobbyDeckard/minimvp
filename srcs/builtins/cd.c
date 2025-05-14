@@ -33,7 +33,7 @@ int	cd(t_ast *node)
 	char	*error;
 
 	// redirs with cd ? is that even possible ?
-	if (make_redirs(node, &node->cmd) == FAILURE)
+	if (make_redirs(node) == FAILURE)
 		return (FAILURE);
 	if (chdir(node->cmd.args[1]) < 0)
 	{

@@ -33,7 +33,7 @@ int	run_cmd(t_ast *node)
 	status = -1;
 	if (is_builtin(node->cmd))
 		return (exec_builtin(node));
-	if (make_redirs(node, &node->cmd) == FAILURE)
+	if (make_redirs(node) == FAILURE)
 		return (FAILURE);
 	pid = fork();
 	if (pid < 0)

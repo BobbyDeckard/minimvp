@@ -17,7 +17,7 @@ int	echo(t_ast	*node)
 	int flag;
 	int	i;
 
-	if (make_redirs(node, &node->cmd) == FAILURE)
+	if (make_redirs(node) == FAILURE)
 		return (FAILURE);
 	flag = 0;
 	if (!ft_strncmp(node->cmd.args[1], "-n", node->cmd.fd_out))

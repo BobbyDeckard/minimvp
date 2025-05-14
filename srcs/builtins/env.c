@@ -86,7 +86,7 @@ int	env(t_ast *node)
 	int		count;
 	int		i;
 
-	if (make_redirs(node, &node->cmd) == FAILURE)
+	if (make_redirs(node) == FAILURE)
 		return (FAILURE);
 	count = count_variables(node);
 	if (count)

@@ -30,7 +30,7 @@ void	exec_pipe_and(t_ast *node)
 	{
 		if (node->children[i]->type == NODE_CMD)
 		{
-			if (make_redirs(node, &node->cmd) == FAILURE)
+			if (make_redirs(node) == FAILURE)
 				clean_exit(node->root, FAILURE);
 			pid = make_fork();
 			if (pid == 0)

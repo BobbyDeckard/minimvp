@@ -18,10 +18,7 @@
 void	unlink_heredoc(t_ast *node)
 {
 	if (node->children && node->children[0]->type == NODE_HEREDOC)
-	{
-		printf("About to unlink %s\n", node->children[0]->file);
 		unlink(node->children[0]->file);
-	}
 }
 
 int	check_and_open(char *name, t_ast *node, t_cmd *cmd)

@@ -42,7 +42,7 @@ void	make_redir_append(t_ast *node, t_cmd *cmd)
 		perror(node->file);
 }
 
-int	make_redirs(t_ast *node, t_cmd *cmd)
+int	make_redirs(t_ast *node)
 {
 	int	i;
 
@@ -52,13 +52,13 @@ int	make_redirs(t_ast *node, t_cmd *cmd)
 		while (node->children[++i])
 		{
 			if (node->children[i]->type == NODE_REDIR_IN)
-				make_redir_in(node->children[i], cmd);
+				make_redir_in(node->children[i], &node->cmd);
 			else if (node->children[i]->type == NODE_REDIR_OUT)
-				make_redir_out(node->children[i], cmd);
+				make_redir_out(node->children[i], &node->cmd);
 			else if (node->children[i]->type == NODE_REDIR_APPEND)
-				make_redir_append(node->children[i], cmd);
+				make_redir_append(node->children[i], &node->cmd);
 			else if (node->children[i]->type == NODE_HEREDOC)
-				make_heredoc(node->children[i], cmd);
+				make_heredoc(node->children[i], &node->cmd);
 		}
 	}
 	return (check_redirs(node, node->cmd));

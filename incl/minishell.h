@@ -83,7 +83,7 @@ int		check_redirs(t_ast *child, t_cmd cmd);
 int		exec_ast(t_ast *ast);
 int		exec_pipe(t_ast **children);
 int		exec_subshell(t_ast *node);
-int		make_redirs(t_ast *ast, t_cmd *cmd);
+int		make_redirs(t_ast *ast);
 
 /* Utilities functions */
 void	clean_exit(t_ast *root, int status);
