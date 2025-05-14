@@ -69,7 +69,7 @@ void	make_heredoc(t_ast *node, t_cmd *cmd)
 		return ;
 	while (1)
 	{
-		line = readline(">");
+		line = readline("> ");
 		if (!ft_strncmp(line, delimiter, len))
 			break ;
 		ft_putstr_fd(line, cmd->fd_in);
