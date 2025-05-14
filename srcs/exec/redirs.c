@@ -14,40 +14,31 @@
 
 void	make_redir_in(t_ast *node)
 {
-	t_cmd	*cmd;
-	
-	cmd = &node->cmd;
 	if (access(node->file, F_OK) != 0 || access(node->file, R_OK) != 0)
-		cmd->fd_in = -1;
+		node->cmd.fd_in = -1;
 	else
-		cmd->fd_in = open(node->file, O_RDONLY);
-	if (cmd->fd_in < 0)
+		node->cmd.fd_in = open(node->file, O_RDONLY);
+	if (node->cmd.fd_in < 0)
 		perror(node->file);
 }
 
 void	make_redir_out(t_ast *node)
 {
-	t_cmd	*cmd;
-	
-	cmd = &node->cmd;
 	if (access(node->file, F_OK) == 0 && access(node->file, W_OK) != 0)
-		cmd->fd_out = -1;
+		node->cmd.fd_out = -1;
 	else
-		cmd->fd_out = open(node->file, O_TRUNC | O_WRONLY | O_CREAT, 0644);
-	if (cmd->fd_out < 0)
+		node->cmd.fd_out = open(node->file, O_TRUNC | O_WRONLY | O_CREAT, 0644);
+	if (node->cmd.fd_out < 0)
 		perror(node->file);
 }
 
 void	make_redir_append(t_ast *node)
 {
-	t_cmd	*cmd;
-	
-	cmd = &node->cmd;
 	if (access(node->file, F_OK) == 0 && access(node->file, W_OK) != 0)
-		cmd->fd_out = -1;
+		node->cmd.fd_out = -1;
 	else
-		cmd->fd_out = open(node->file, O_APPEND | O_WRONLY | O_CREAT, 0644);
-	if (cmd->fd_out < 0)
+		node->cmd.fd_out = open(node->file, O_APPEND | O_WRONLY | O_CREAT, 0644);
+	if (node->cmd.fd_out < 0)
 		perror(node->file);
 }
 
