@@ -70,7 +70,6 @@ void	make_heredoc(t_ast *node, t_cmd *cmd)
 //		return ;
 	if (!check_and_open("temp", node, cmd))
 		return ;
-	printf("Created and opened new file, name: %s\n", node->file);
 	while (1)
 	{
 		line = readline(">");

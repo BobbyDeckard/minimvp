@@ -33,24 +33,20 @@ int	run_cmd(t_ast *node)
 	status = -1;
 	if (is_builtin(node->cmd))
 		return (exec_builtin(node));
-	printf("initial cmd input: %d, cmd output: %d\n", node->cmd.fd_in, node->cmd.fd_out);
+	if (make_redirs(node, &node->cmd) == FAILURE)
+		return (FAILURE);
 	pid = fork();
 	if (pid < 0)
 		return (fork_error());
 	if (pid == 0)
 	{
-		if (make_redirs(node, &node->cmd) == FAILURE)
-			return (FAILURE);
-		printf("in child process, input = %d, output = %d\n", node->cmd.fd_in, node->cmd.fd_out);
 		dup_fds(*node);
 		exec_cmd(node, node->cmd);
 		unlink_heredoc(node);
 		clean_exit(node->root, FAILURE);
 	}
-	printf("final cmd input: %d, cmd output: %d\n", node->cmd.fd_in, node->cmd.fd_out);
 	close_redirs(node->cmd);
 	waitpid(pid, &status, 0);
-	printf("Child process done, about to call unlink on file %s\n", node->children[0]->file);
 	unlink_heredoc(node);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);

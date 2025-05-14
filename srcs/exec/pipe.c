@@ -14,8 +14,6 @@
 
 void	exec_pipe_cmd(t_ast *node)
 {
-	if (make_redirs(node, &node->cmd) == FAILURE)
-		clean_exit(node->root, FAILURE);
 	dup_fds(*node);
 	exec_cmd(node, node->cmd);
 	clean_exit(node->root, FAILURE);
@@ -32,6 +30,8 @@ void	exec_pipe_and(t_ast *node)
 	{
 		if (node->children[i]->type == NODE_CMD)
 		{
+			if (make_redirs(node, &node->cmd) == FAILURE)
+				clean_exit(node->root, FAILURE);
 			pid = make_fork();
 			if (pid == 0)
 				exec_pipe_child(node->children[i]);
