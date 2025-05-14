@@ -40,11 +40,8 @@ int	run_cmd(t_ast *node)
 	{
 		if (make_redirs(node) == FAILURE)
 			return (FAILURE);
-		printf("Redir made, about to dup2\n");
 		dup_fds(*node);
-		printf("dup2 made\n");
 		exec_cmd(node, node->cmd);
-		printf("Bad news...\n");
 		cleanup(node->root);
 		exit(FAILURE);
 	}

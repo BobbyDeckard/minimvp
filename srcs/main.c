@@ -101,7 +101,7 @@ int main(int ac, char **av, char **envp)
 	if (ac != 2)
 		return (1);
 	mode = ft_atoi(av[1]);
-	if (mode > 16)
+	if (mode > 188888888)
 	{
 		printf("Invalid preset\n");
 		return (1);

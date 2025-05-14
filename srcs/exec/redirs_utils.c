@@ -30,6 +30,7 @@ int	check_redirs(t_ast *child, t_cmd cmd)
 		close_redirs(child, cmd);
 		return (FAILURE);
 	}
+	printf("Redirs check ok\n");
 	return (SUCCESS);
 }
 

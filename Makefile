@@ -12,7 +12,7 @@
 
 NAME = minimvp
 CC = cc
-CFLAGS = -Wextra -Wall -Werror
+CFLAGS = -Wextra -Wall -Werror -g
 LFLAGS = -lreadline
 RM = rm
 RMFLAGS = -f
